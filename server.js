@@ -33,34 +33,79 @@ for (let i = 1; i < lines.length; i++) {
     PRODUCTOS.push(obj);
 }
 
-const ESTADO_MULT = { Excelente: 1.0, Bueno: 0.85, Regular: 0.65, Deficiente: 0.45 };
+const ESTADO_MULT = { Excelente: 1.12, Bueno: 1.0, Regular: 0.78, Deficiente: 0.55 };
+
+const FACTOR_CATEGORIA = {
+    Celular: 0.08,
+    Laptop: 0.10,
+    Tablet: 0.09,
+    Consola: 0.06,
+    TV: 0.12,
+    Audifonos: 0.07,
+    Lavadora: 0.14,
+    Refrigerador: 0.15,
+    Microondas: 0.12,
+    Bicicleta: 0.05,
+};
 
 function buscarProducto(categoria, marca, modelo) {
     const cl = categoria.toLowerCase();
     const ml = marca.toLowerCase();
-    const mdl = modelo.toLowerCase();
-    return PRODUCTOS.find(p =>
-        p.categoria.toLowerCase().includes(cl) &&
-        p.marca.toLowerCase().includes(ml) &&
+    const mdl = modelo.toLowerCase().trim();
+
+    const exactMatch = PRODUCTOS.find(p =>
+        p.categoria.toLowerCase() === cl &&
+        p.marca.toLowerCase() === ml &&
+        p.modelo.toLowerCase().trim() === mdl
+    );
+    if (exactMatch) return exactMatch;
+
+    const brandExact = PRODUCTOS.find(p =>
+        p.marca.toLowerCase() === ml &&
+        p.modelo.toLowerCase().trim() === mdl
+    );
+    if (brandExact) return brandExact;
+
+    const catBrandModel = PRODUCTOS.find(p =>
+        p.categoria.toLowerCase() === cl &&
+        p.marca.toLowerCase() === ml &&
         p.modelo.toLowerCase().includes(mdl)
-    ) || PRODUCTOS.find(p =>
-        p.marca.toLowerCase().includes(ml) &&
+    );
+    if (catBrandModel) return catBrandModel;
+
+    const brandModel = PRODUCTOS.find(p =>
+        p.marca.toLowerCase() === ml &&
         p.modelo.toLowerCase().includes(mdl)
-    ) || PRODUCTOS.find(p => p.modelo.toLowerCase().includes(mdl));
+    );
+    if (brandModel) return brandModel;
+
+    return PRODUCTOS.find(p => p.modelo.toLowerCase().includes(mdl));
 }
 
 function calcularPrecio(producto, estado) {
     const key = `precio_usado_${estado.toLowerCase()}`;
     let base = producto[key];
     if (!base && estado === 'Excelente') {
-        base = Math.round(producto.precio_usado_bueno * 1.15);
+        base = Math.round(producto.precio_usado_bueno * 1.12);
     }
     base = base || 0;
-    const mult = ESTADO_MULT[estado] || 0.85;
-    const minimo = Math.round(base * mult * 0.85 / 100) * 100;
-    const sugerido = Math.round(base * mult / 100) * 100;
-    const maximo = Math.round(base * mult * 1.15 / 100) * 100;
-    return { minimo, sugerido, maximo, precio_nuevo: Math.round(producto.precio_nuevo) };
+
+    const mult = ESTADO_MULT[estado] || 1.0;
+    const catFactor = FACTOR_CATEGORIA[producto.categoria] || 0.08;
+
+    const precio = Math.round(base * mult);
+    const variacion = Math.max(500, Math.round(precio * catFactor));
+
+    const minimo = Math.round((precio - variacion) / 100) * 100;
+    const sugerido = Math.round(precio / 100) * 100;
+    const maximo = Math.round((precio + variacion) / 100) * 100;
+
+    return {
+        minimo: Math.max(100, minimo),
+        sugerido,
+        maximo,
+        precio_nuevo: Math.round(producto.precio_nuevo),
+    };
 }
 
 async function generarDescripcion(categoria, marca, modelo, estado, accesorios) {

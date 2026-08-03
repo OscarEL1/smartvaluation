@@ -1,51 +1,85 @@
 categoria,marca,modelo,precio_nuevo,precio_usado_bueno,precio_usado_regular,precio_usado_deficiente
-Celular,Samsung,Galaxy S23,15999,9500,7000,4500
-Celular,Samsung,Galaxy S22,12999,7200,5000,3000
-Celular,Samsung,Galaxy A54,6999,4200,3000,1800
-Celular,Samsung,Galaxy A34,5499,3200,2200,1400
-Celular,Apple,iPhone 15,21999,14500,11000,7000
-Celular,Apple,iPhone 14,17999,11000,8000,5000
-Celular,Apple,iPhone 13,14999,8500,6000,3500
-Celular,Apple,iPhone SE 3,9999,6000,4200,2500
-Celular,Xiaomi,Redmi Note 12,4999,2800,1900,1100
-Celular,Xiaomi,Redmi Note 11,3999,2100,1400,800
-Celular,Motorola,Moto G84,5499,3100,2100,1300
-Celular,Motorola,Moto G54,4499,2500,1700,1000
-Laptop,HP,Pavilion 15,14999,8500,5500,3000
-Laptop,HP,245 G9,7999,4500,2800,1500
-Laptop,Dell,Inspiron 15,13999,7800,5000,2800
-Laptop,Dell, Latitude 5420,12999,7000,4500,2500
-Laptop,Lenovo,IdeaPad 3,10999,6200,4000,2200
-Laptop,Lenovo,ThinkPad E14,12499,7200,4800,2800
-Laptop,Acer,Aspire 5,9999,5500,3500,1800
-Laptop,ASUS,Vivobook 15,11999,6800,4200,2400
-Tablet,Samsung,Galaxy Tab S9,16999,10000,7000,4000
-Tablet,Samsung,Galaxy Tab A9,4999,2800,1800,1000
-Tablet,Apple,iPad 10,11999,7500,5500,3200
-Tablet,Apple,iPad Air 5,14999,9000,6500,4000
-Tablet,Xiaomi,Pad 6,8999,5200,3500,2000
-Consola,Sony,PlayStation 5,12999,9000,7000,4500
-Consola,Sony,PlayStation 4,7999,4500,3000,1800
-Consola,Microsoft,Xbox Series X,11999,8000,5500,3500
-Consola,Microsoft,Xbox One S,5999,3200,2100,1200
-Consola,Nintendo,Switch OLED,8999,6500,5000,3000
-Consola,Nintendo,Switch Lite,4999,3500,2500,1500
-TV,LG,OLED C3 55",24999,15000,10000,6000
-TV,Samsung,QLED 55",19999,12000,8000,5000
-TV,Samsung,Crystal UHD 50",11999,6500,4200,2500
-TV,LG,LED 50",9999,5500,3500,2000
-TV,Sony,Bravia 55",17999,10500,7000,4000
-Audifonos,Sony,WH-1000XM5,6999,4500,3200,1800
-Audifonos,Sony,WH-1000XM4,5499,3500,2400,1400
-Audifonos,Apple,AirPods Pro 2,4999,3500,2500,1500
-Audifonos,Apple,AirPods 3,3499,2400,1700,1000
-Audifonos,JBL,Tune 770NC,2499,1600,1100,600
-Audifonos,Samsung,Galaxy Buds2 Pro,4999,3200,2200,1300
-Lavadora,Whirlpool,15 kg Carga Frontal,13999,8000,5000,2800
-Lavadora,Whirlpool,12 kg Carga Superior,8999,5200,3200,1800
-Refrigerador,Mabe,315L No Frost,15999,9500,6000,3500
-Refrigerador,Samsung,355L No Frost,18999,11500,7500,4200
-Microondas,Whirlpool,20L Digital,3499,2100,1400,800
-Microondas,Samsung,23L Digital,3999,2400,1600,900
-Bicicleta,Giant,ATX 27.5,7999,5000,3500,2000
-Bicicleta,Trek,Marlin 7,14999,9500,6500,3800
+Celular,Samsung,Galaxy S24 Ultra,29999,19500,15000,9500
+Celular,Samsung,Galaxy S24,17999,12000,9000,5500
+Celular,Samsung,Galaxy S23 Ultra,24999,15000,11000,7000
+Celular,Samsung,Galaxy S23,14999,8800,6500,4000
+Celular,Samsung,Galaxy S22 Ultra,19999,10500,7500,4500
+Celular,Samsung,Galaxy S22,12999,6800,4800,2800
+Celular,Samsung,Galaxy A54,6499,3800,2600,1500
+Celular,Samsung,Galaxy A34,5299,2900,1900,1100
+Celular,Samsung,Galaxy A15,3499,1800,1200,650
+Celular,Apple,iPhone 15 Pro Max,29999,21000,16500,11000
+Celular,Apple,iPhone 15 Pro,24999,17000,13000,8500
+Celular,Apple,iPhone 15,19999,13500,10000,6500
+Celular,Apple,iPhone 14 Pro Max,24999,15500,11500,7000
+Celular,Apple,iPhone 14,16999,10000,7200,4200
+Celular,Apple,iPhone 13,13999,7800,5500,3200
+Celular,Apple,iPhone 13 Mini,10999,6200,4300,2500
+Celular,Apple,iPhone SE 3,9499,5500,3800,2200
+Celular,Xiaomi,Redmi Note 13 Pro,5999,3400,2300,1300
+Celular,Xiaomi,Redmi Note 12,4499,2500,1700,950
+Celular,Xiaomi,Redmi Note 11,3499,1800,1200,650
+Celular,Xiaomi,Poco X6 Pro,7999,4800,3400,2000
+Celular,Motorola,Moto Edge 40,7999,4500,3000,1700
+Celular,Motorola,Moto G84,5499,3000,2000,1100
+Celular,Motorola,Moto G54,4499,2400,1600,900
+Celular,Google,Pixel 8 Pro,17999,11000,8000,5000
+Celular,Google,Pixel 8,13999,8500,6000,3500
+Laptop,HP,Pavilion 15,13999,7500,4800,2500
+Laptop,HP,245 G9,7499,4000,2500,1300
+Laptop,HP,ProBook 450,15999,9000,6000,3500
+Laptop,Dell,Inspiron 15,12999,7000,4500,2400
+Laptop,Dell, Latitude 5420,11999,6500,4000,2200
+Laptop,Dell,XPS 15,24999,15000,10000,6000
+Laptop,Lenovo,IdeaPad 3,9999,5500,3500,1800
+Laptop,Lenovo,ThinkPad E14,11999,6800,4500,2600
+Laptop,Lenovo,Legion 5,19999,12000,8500,5000
+Laptop,Acer,Aspire 5,8999,4800,3000,1600
+Laptop,ASUS,Vivobook 15,10999,6000,3800,2000
+Laptop,ASUS,ROG Strix G15,22999,14000,9500,5500
+Tablet,Samsung,Galaxy Tab S9 FE,8999,5500,3800,2200
+Tablet,Samsung,Galaxy Tab A9,4499,2500,1600,900
+Tablet,Apple,iPad 10,10999,7000,5000,3000
+Tablet,Apple,iPad Air 5,13999,8500,6000,3500
+Tablet,Apple,iPad Mini 6,11999,7500,5500,3200
+Tablet,Xiaomi,Pad 6,7999,4800,3200,1800
+Consola,Sony,PlayStation 5,12499,8500,6500,4000
+Consola,Sony,PlayStation 5 Slim,11999,8200,6200,3800
+Consola,Sony,PlayStation 4,7499,4000,2600,1500
+Consola,Microsoft,Xbox Series X,11499,7500,5000,3000
+Consola,Microsoft,Xbox Series S,5999,3800,2500,1400
+Consola,Microsoft,Xbox One S,5499,2800,1800,1000
+Consola,Nintendo,Switch OLED,8499,6200,4800,2800
+Consola,Nintendo,Switch,6999,4800,3500,2000
+Consola,Nintendo,Switch Lite,4499,3200,2200,1200
+TV,LG,OLED C3 55",22999,14000,9500,5500
+TV,LG,OLED B3 55",18999,11500,7500,4200
+TV,Samsung,QLED Q60C 55",17999,10500,7000,4000
+TV,Samsung,Crystal UHD 50",10999,5800,3800,2200
+TV,Samsung,Crystal UHD 43",8499,4200,2700,1500
+TV,Sony,Bravia XR 55",21999,13500,9000,5200
+TV,TCL,4K QLED 55",9999,5500,3500,2000
+Audifonos,Sony,WH-1000XM5,6499,4200,2900,1600
+Audifonos,Sony,WH-1000XM4,4999,3200,2200,1200
+Audifonos,Sony,WF-1000XM5,5499,3600,2500,1400
+Audifonos,Apple,AirPods Pro 2,4499,3200,2300,1300
+Audifonos,Apple,AirPods 3,3299,2200,1500,850
+Audifonos,Apple,AirPods Max,12999,8500,6000,3500
+Audifonos,JBL,Tune 770NC,2299,1400,950,500
+Audifonos,JBL,Live Pro 2,3499,2200,1500,850
+Audifonos,Samsung,Galaxy Buds2 Pro,4499,2800,1900,1100
+Audifonos,Samsung,Galaxy Buds FE,1999,1200,800,450
+Lavadora,Whirlpool,15 kg Carga Frontal,13499,7500,4500,2400
+Lavadora,Whirlpool,12 kg Carga Superior,8499,4800,2900,1500
+Lavadora,Mabe,17 kg Carga Frontal,12999,7200,4200,2200
+Lavadora,Mabe,11 kg Carga Superior,6499,3500,2100,1100
+Refrigerador,Mabe,315L No Frost,14999,8500,5200,2800
+Refrigerador,Samsung,355L No Frost,17999,10500,6800,3800
+Refrigerador,Whirlpool,340L No Frost,15999,9200,5800,3200
+Refrigerador,LG,385L No Frost,19999,12000,7800,4300
+Microondas,Whirlpool,20L Digital,3299,1900,1250,650
+Microondas,Samsung,23L Digital,3799,2200,1450,780
+Microondas, LG, 20L Digital,2999,1700,1100,580
+Bicicleta,Giant,ATX 27.5,7499,4600,3100,1700
+Bicicleta,Trek,Marlin 7,13999,8800,5800,3200
+Bicicleta,Specialized,Rockhopper,11999,7500,5000,2800
