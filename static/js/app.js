@@ -17,7 +17,7 @@ const steps = {
 
 async function loadCategorias() {
     const grid = document.getElementById('categoria-options');
-    grid.innerHTML = '<div class="loading">Cargando...</div>';
+    grid.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>';
     try {
         const res = await fetch('/api/categorias');
         const cats = await res.json();
@@ -122,13 +122,27 @@ function showStep(n) {
     document.getElementById(`step${n}`).classList.add('active');
 }
 
+function showFieldError(step, msg) {
+    const el = document.getElementById(`error-step${step}`);
+    if (el) el.textContent = msg;
+}
+
+function clearFieldErrors() {
+    document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+}
+
 document.getElementById('btn-next').addEventListener('click', async () => {
+    clearFieldErrors();
     if (currentStep === 1 && !formData.categoria) {
-        alert('Selecciona una categoria');
+        showFieldError(1, 'Selecciona una categoria');
         return;
     }
-    if (currentStep === 2 && (!formData.marca || !formData.modelo)) {
-        alert('Selecciona marca y modelo');
+    if (currentStep === 2 && !formData.marca) {
+        showFieldError(2, 'Selecciona una marca');
+        return;
+    }
+    if (currentStep === 2 && !formData.modelo) {
+        showFieldError(2, 'Selecciona un modelo');
         return;
     }
 
@@ -150,7 +164,7 @@ document.getElementById('btn-prev').addEventListener('click', () => {
 
 async function loadResultado() {
     const container = document.getElementById('resultado-container');
-    container.innerHTML = '<div class="loading">Calculando precio con IA...</div>';
+    container.innerHTML = '<div class="spinner-container"><div class="spinner"></div><p class="spinner-text">Calculando precio con IA...</p></div>';
 
     formData.accesorios = document.getElementById('accesorios-input')?.value || '';
 
