@@ -6,6 +6,7 @@ let formData = {
     estado: 'Bueno',
     accesorios: '',
 };
+let priceChart = null;
 
 const steps = {
     1: loadCategorias,
@@ -199,6 +200,8 @@ async function loadResultado() {
                 </div>
             </div>
         `;
+
+        renderChart(p);
     } catch {
         container.innerHTML = '<div class="error-msg">Error al conectar con el servidor</div>';
     }
@@ -221,6 +224,65 @@ function reiniciar() {
     loadCategorias();
     document.getElementById('accesorios-input').value = '';
     document.querySelector('input[name="estado"][value="Bueno"]').checked = true;
+    document.getElementById('chart-container').style.display = 'none';
+    if (priceChart) { priceChart.destroy(); priceChart = null; }
+}
+
+function renderChart(precios) {
+    const container = document.getElementById('chart-container');
+    container.style.display = 'block';
+
+    if (priceChart) priceChart.destroy();
+
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    priceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Minimo', 'Sugerido', 'Maximo', 'Precio Nuevo'],
+            datasets: [{
+                label: 'Precio ($)',
+                data: [precios.minimo, precios.sugerido, precios.maximo, precios.precio_nuevo],
+                backgroundColor: [
+                    'rgba(220, 38, 38, 0.8)',
+                    'rgba(5, 150, 105, 0.8)',
+                    'rgba(37, 99, 235, 0.8)',
+                    'rgba(156, 163, 175, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(220, 38, 38, 1)',
+                    'rgba(5, 150, 105, 1)',
+                    'rgba(37, 99, 235, 1)',
+                    'rgba(156, 163, 175, 0.8)',
+                ],
+                borderWidth: 2,
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => `$${ctx.raw.toLocaleString()}`
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: v => '$' + v.toLocaleString()
+                    },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
 }
 
 loadCategorias();
