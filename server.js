@@ -139,6 +139,120 @@ app.get('/api/modelos', (req, res) => {
     res.json(modelos);
 });
 
+app.get('/api/insights', (req, res) => {
+    const porCategoria = {};
+    PRODUCTOS.forEach(p => {
+        if (!porCategoria[p.categoria]) {
+            porCategoria[p.categoria] = { count: 0, depBueno: 0, depRegular: 0, depDeficiente: 0 };
+        }
+        const cat = porCategoria[p.categoria];
+        cat.count++;
+        cat.depBueno += (1 - p.precio_usado_bueno / p.precio_nuevo) * 100;
+        cat.depRegular += (1 - p.precio_usado_regular / p.precio_nuevo) * 100;
+        cat.depDeficiente += (1 - p.precio_usado_deficiente / p.precio_nuevo) * 100;
+    });
+
+    const insights = Object.entries(porCategoria).map(([cat, d]) => ({
+        categoria: cat,
+        total: d.count,
+        depBueno: Math.round(d.depBueno / d.count),
+        depRegular: Math.round(d.depRegular / d.count),
+        depDeficiente: Math.round(d.depDeficiente / d.count),
+    })).sort((a, b) => a.depBueno - b.depBueno);
+
+    res.json(insights);
+});
+
+app.post('/api/tasar-stream', async (req, res) => {
+    const { categoria, marca, modelo, estado, accesorios } = req.body;
+    const producto = buscarProducto(categoria, marca, modelo);
+    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+
+    const precios = calcularPrecio(producto, estado);
+
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+    });
+
+    res.write(`data: ${JSON.stringify({ precios })}\n\n`);
+
+    const apiKey = process.env.GROQ_API_KEY || '';
+    if (!apiKey) {
+        let desc = `${marca} ${modelo} en estado ${estado}.`;
+        if (accesorios) desc += ` Incluye: ${accesorios}.`;
+        desc += ' Excelente relacion calidad-precio. Envio disponible.';
+        res.write(`data: ${JSON.stringify({ chunk: desc })}\n\n`);
+        res.write('data: [DONE]\n\n');
+        return res.end();
+    }
+
+    try {
+        const accText = accesorios || 'Ninguno';
+        const prompt = `Escribe una descripcion comercial persuasiva y honesta para vender este articulo en un marketplace. 
+El texto debe ser atractivo, destacar puntos positivos, ser transparente sobre el estado y optimizado para busquedas.
+Maximo 100 palabras. Sin emojis. Solo texto plano.
+
+Articulo:
+- Categoria: ${categoria}
+- Marca: ${marca}
+- Modelo: ${modelo}
+- Estado: ${estado}
+- Accesorios incluidos: ${accText}
+
+Escribe SOLO la descripcion, sin titulos ni explicaciones.`;
+
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                model: 'llama-3.3-70b-versatile',
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: 200,
+                temperature: 0.7,
+                stream: true,
+            }),
+        });
+
+        const reader = response.body;
+        let buffer = '';
+
+        for await (const chunk of reader) {
+            buffer += chunk.toString();
+            const lines = buffer.split('\n');
+            buffer = lines.pop();
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6);
+                    if (data === '[DONE]') {
+                        res.write('data: [DONE]\n\n');
+                        return res.end();
+                    }
+                    try {
+                        const parsed = JSON.parse(data);
+                        const content = parsed.choices?.[0]?.delta?.content;
+                        if (content) {
+                            res.write(`data: ${JSON.stringify({ chunk: content })}\n\n`);
+                        }
+                    } catch {}
+                }
+            }
+        }
+        res.write('data: [DONE]\n\n');
+        res.end();
+    } catch (e) {
+        console.error('Stream error:', e.message);
+        res.write(`data: ${JSON.stringify({ chunk: 'Error al generar descripcion.' })}\n\n`);
+        res.write('data: [DONE]\n\n');
+        res.end();
+    }
+});
+
 app.post('/api/tasar', async (req, res) => {
     const { categoria, marca, modelo, estado, accesorios } = req.body;
     const producto = buscarProducto(categoria, marca, modelo);

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartValuation - Asistente de Tasacion</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -40,8 +41,9 @@
             <div class="form-step active" id="step1">
                 <h2>¿Que categoria es tu articulo?</h2>
                 <div class="options-grid" id="categoria-options">
-                    <div class="loading">Cargando categorias...</div>
+                    <div class="spinner-container"><div class="spinner"></div></div>
                 </div>
+                <div class="field-error" id="error-step1"></div>
             </div>
 
             <!-- Paso 2: Marca y Modelo -->
@@ -59,6 +61,7 @@
                         <option value="">Selecciona un modelo</option>
                     </select>
                 </div>
+                <div class="field-error" id="error-step2"></div>
             </div>
 
             <!-- Paso 3: Estado y Accesorios -->
@@ -104,7 +107,10 @@
             <div class="form-step" id="step4">
                 <h2>Tu propuesta de venta</h2>
                 <div id="resultado-container">
-                    <div class="loading">Calculando precio...</div>
+                    <div class="spinner-container"><div class="spinner"></div><p class="spinner-text">Calculando precio con IA...</p></div>
+                </div>
+                <div class="chart-container" id="chart-container" style="display:none">
+                    <canvas id="priceChart"></canvas>
                 </div>
             </div>
         </div>
@@ -116,6 +122,34 @@
 
         <div class="actions" id="actions" style="display:none">
             <button class="btn btn-secondary" onclick="reiniciar()"> Tasar otro articulo</button>
+        </div>
+
+        <div class="history-section" id="history-section" style="display:none">
+            <div class="history-header">
+                <h3>Historial de tasaciones</h3>
+                <button class="btn-clear" onclick="clearHistory()">Limpiar</button>
+            </div>
+            <div class="history-table-wrap">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Articulo</th>
+                            <th>Estado</th>
+                            <th>Sugerido</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dashboard-section" id="dashboard-section">
+            <h3>Insights de mercado</h3>
+            <p class="dashboard-subtitle">Depreciacion promedio por categoria (estado Bueno)</p>
+            <div class="insights-grid" id="insights-grid">
+                <div class="spinner-container"><div class="spinner"></div></div>
+            </div>
         </div>
     </div>
 
