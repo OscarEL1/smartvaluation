@@ -419,6 +419,18 @@ header h1 {
     font-size: 0.9rem;
 }
 
+/* Cursor blink */
+.cursor {
+    animation: blink 0.7s infinite;
+    color: var(--primary);
+    font-weight: 300;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 /* Field Error */
 .field-error {
     color: var(--red);

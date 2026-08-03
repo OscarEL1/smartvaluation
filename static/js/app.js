@@ -169,55 +169,86 @@ async function loadResultado() {
     formData.accesorios = document.getElementById('accesorios-input')?.value || '';
 
     try {
-        const res = await fetch('/api/tasar', {
+        const res = await fetch('/api/tasar-stream', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData),
         });
-        const data = await res.json();
 
-        if (data.error) {
-            container.innerHTML = `<div class="error-msg">${data.error}</div>`;
-            return;
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let precios = null;
+        let descripcion = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop();
+
+            for (const line of lines) {
+                if (!line.startsWith('data: ')) continue;
+                const data = line.slice(6).trim();
+                if (data === '[DONE]') continue;
+
+                try {
+                    const parsed = JSON.parse(data);
+                    if (parsed.precios) {
+                        precios = parsed.precios;
+                    }
+                    if (parsed.chunk) {
+                        descripcion += parsed.chunk;
+                    }
+                } catch {}
+            }
+
+            if (precios && descripcion) {
+                container.innerHTML = `
+                    <div class="resultado-card">
+                        <h3>Rango de precio sugerido</h3>
+                        <div class="precio-grid">
+                            <div class="precio-item minimo">
+                                <div class="precio-label">Minimo</div>
+                                <div class="precio-valor">$${precios.minimo.toLocaleString()}</div>
+                            </div>
+                            <div class="precio-item sugerido">
+                                <div class="precio-label">Sugerido</div>
+                                <div class="precio-valor">$${precios.sugerido.toLocaleString()}</div>
+                            </div>
+                            <div class="precio-item maximo">
+                                <div class="precio-label">Maximo</div>
+                                <div class="precio-valor">$${precios.maximo.toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div style="text-align:center; font-size:0.8rem; color:#6b7280;">
+                            Precio nuevo: $${precios.precio_nuevo.toLocaleString()} &nbsp;|&nbsp;
+                            Depreciacion: ${Math.round((1 - precios.sugerido/precios.precio_nuevo) * 100)}%
+                        </div>
+                    </div>
+
+                    <div class="resultado-card">
+                        <div class="descripcion-box">
+                            <h4>Descripcion para publicar</h4>
+                            <p class="descripcion-text">${descripcion}<span class="cursor">|</span></p>
+                            <button class="copy-btn" onclick="copiarDescripcion()" style="display:none" id="copy-btn-final">
+                                Copiar descripcion
+                            </button>
+                        </div>
+                    </div>
+                `;
+                renderChart(precios);
+            }
         }
 
-        const p = data.precios;
-        container.innerHTML = `
-            <div class="resultado-card">
-                <h3>Rango de precio sugerido</h3>
-                <div class="precio-grid">
-                    <div class="precio-item minimo">
-                        <div class="precio-label">Minimo</div>
-                        <div class="precio-valor">$${p.minimo.toLocaleString()}</div>
-                    </div>
-                    <div class="precio-item sugerido">
-                        <div class="precio-label">Sugerido</div>
-                        <div class="precio-valor">$${p.sugerido.toLocaleString()}</div>
-                    </div>
-                    <div class="precio-item maximo">
-                        <div class="precio-label">Maximo</div>
-                        <div class="precio-valor">$${p.maximo.toLocaleString()}</div>
-                    </div>
-                </div>
-                <div style="text-align:center; font-size:0.8rem; color:#6b7280;">
-                    Precio nuevo: $${p.precio_nuevo.toLocaleString()} &nbsp;|&nbsp;
-                    Depreciacion: ${Math.round((1 - p.sugerido/p.precio_nuevo) * 100)}%
-                </div>
-            </div>
+        const cursor = document.querySelector('.cursor');
+        if (cursor) cursor.remove();
+        const copyBtn = document.getElementById('copy-btn-final');
+        if (copyBtn) copyBtn.style.display = 'block';
 
-            <div class="resultado-card">
-                <div class="descripcion-box">
-                    <h4>Descripcion para publicar</h4>
-                    <p class="descripcion-text">${data.descripcion}</p>
-                    <button class="copy-btn" onclick="copiarDescripcion()">
-                        Copiar descripcion
-                    </button>
-                </div>
-            </div>
-        `;
-
-        renderChart(p);
-        saveHistory(formData, data.precios);
+        if (precios) saveHistory(formData, precios);
     } catch {
         container.innerHTML = '<div class="error-msg">Error al conectar con el servidor</div>';
     }
