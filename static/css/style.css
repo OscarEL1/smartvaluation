@@ -518,6 +518,70 @@ header h1 {
     font-size: 0.85rem;
 }
 
+/* Dashboard */
+.dashboard-section {
+    margin-top: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.dashboard-section h3 {
+    font-size: 1rem;
+    color: var(--gray-900);
+    margin-bottom: 0.25rem;
+}
+
+.dashboard-subtitle {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-bottom: 1rem;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.insight-card {
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 10px;
+    border: 1px solid var(--gray-200);
+}
+
+.insight-card .cat-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.insight-bar-wrap {
+    background: var(--gray-200);
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 0.3rem;
+}
+
+.insight-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+}
+
+.insight-card .dep-value {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+.insight-card .dep-value strong {
+    color: var(--gray-900);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .options-grid {
