@@ -206,6 +206,7 @@ async function loadResultado() {
             }
 
             if (precios && descripcion) {
+                const query = encodeURIComponent(`${formData.marca} ${formData.modelo}`);
                 container.innerHTML = `
                     <div class="resultado-card">
                         <h3>Rango de precio sugerido</h3>
@@ -226,6 +227,21 @@ async function loadResultado() {
                         <div style="text-align:center; font-size:0.8rem; color:#6b7280;">
                             Precio nuevo: $${precios.precio_nuevo.toLocaleString()} &nbsp;|&nbsp;
                             Depreciacion: ${Math.round((1 - precios.sugerido/precios.precio_nuevo) * 100)}%
+                        </div>
+                    </div>
+
+                    <div class="marketplace-links">
+                        <h4>Buscar en marketplaces</h4>
+                        <div class="marketplace-btns">
+                            <a href="https://listado.mercadolibre.com.mx/${query}" target="_blank" class="mp-link ml">
+                                Mercado Libre
+                            </a>
+                            <a href="https://www.facebook.com/marketplace/search?q=${query}" target="_blank" class="mp-link fb">
+                                Facebook
+                            </a>
+                            <a href="https://www.amazon.com.mx/s?k=${query}" target="_blank" class="mp-link amz">
+                                Amazon
+                            </a>
                         </div>
                     </div>
 
