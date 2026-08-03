@@ -458,6 +458,50 @@ header h1 {
     text-align: center;
 }
 
+/* Marketplace Links */
+.marketplace-links {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+}
+
+.marketplace-links h4 {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.marketplace-btns {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.mp-link {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    transition: opacity 0.2s;
+}
+
+.mp-link:hover {
+    opacity: 0.85;
+}
+
+.mp-link.ml { background: #fff159; color: #333; }
+.mp-link.fb { background: #1877f2; }
+.mp-link.amz { background: #ff9900; }
+
 /* History */
 .history-section {
     margin-top: 1.5rem;
