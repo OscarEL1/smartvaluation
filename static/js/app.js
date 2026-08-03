@@ -7,6 +7,7 @@ let formData = {
     accesorios: '',
 };
 let priceChart = null;
+const HISTORY_KEY = 'smartvaluation_history';
 
 const steps = {
     1: loadCategorias,
@@ -202,6 +203,7 @@ async function loadResultado() {
         `;
 
         renderChart(p);
+        saveHistory(formData, data.precios);
     } catch {
         container.innerHTML = '<div class="error-msg">Error al conectar con el servidor</div>';
     }
@@ -285,4 +287,44 @@ function renderChart(precios) {
     });
 }
 
+function saveHistory(form, precios) {
+    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    history.unshift({
+        fecha: new Date().toLocaleDateString('es-MX'),
+        articulo: `${form.marca} ${form.modelo}`,
+        estado: form.estado,
+        sugerido: precios.sugerido,
+    });
+    if (history.length > 10) history.pop();
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    renderHistory();
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    const section = document.getElementById('history-section');
+    const tbody = document.getElementById('history-body');
+
+    if (history.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    section.style.display = 'block';
+    tbody.innerHTML = history.map(h => `
+        <tr>
+            <td>${h.fecha}</td>
+            <td>${h.articulo}</td>
+            <td>${h.estado}</td>
+            <td><strong>$${h.sugerido.toLocaleString()}</strong></td>
+        </tr>
+    `).join('');
+}
+
+function clearHistory() {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+}
+
 loadCategorias();
+renderHistory();
