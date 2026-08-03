@@ -139,6 +139,30 @@ app.get('/api/modelos', (req, res) => {
     res.json(modelos);
 });
 
+app.get('/api/insights', (req, res) => {
+    const porCategoria = {};
+    PRODUCTOS.forEach(p => {
+        if (!porCategoria[p.categoria]) {
+            porCategoria[p.categoria] = { count: 0, depBueno: 0, depRegular: 0, depDeficiente: 0 };
+        }
+        const cat = porCategoria[p.categoria];
+        cat.count++;
+        cat.depBueno += (1 - p.precio_usado_bueno / p.precio_nuevo) * 100;
+        cat.depRegular += (1 - p.precio_usado_regular / p.precio_nuevo) * 100;
+        cat.depDeficiente += (1 - p.precio_usado_deficiente / p.precio_nuevo) * 100;
+    });
+
+    const insights = Object.entries(porCategoria).map(([cat, d]) => ({
+        categoria: cat,
+        total: d.count,
+        depBueno: Math.round(d.depBueno / d.count),
+        depRegular: Math.round(d.depRegular / d.count),
+        depDeficiente: Math.round(d.depDeficiente / d.count),
+    })).sort((a, b) => a.depBueno - b.depBueno);
+
+    res.json(insights);
+});
+
 app.post('/api/tasar', async (req, res) => {
     const { categoria, marca, modelo, estado, accesorios } = req.body;
     const producto = buscarProducto(categoria, marca, modelo);

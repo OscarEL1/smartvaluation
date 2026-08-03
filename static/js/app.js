@@ -340,5 +340,28 @@ function clearHistory() {
     renderHistory();
 }
 
+async function loadInsights() {
+    const grid = document.getElementById('insights-grid');
+    try {
+        const res = await fetch('/api/insights');
+        const data = await res.json();
+        grid.innerHTML = data.map(d => {
+            const color = d.depBueno < 40 ? '#059669' : d.depBueno < 55 ? '#d97706' : '#dc2626';
+            return `
+                <div class="insight-card">
+                    <div class="cat-name">${d.categoria}</div>
+                    <div class="insight-bar-wrap">
+                        <div class="insight-bar" style="width:${d.depBueno}%;background:${color}"></div>
+                    </div>
+                    <div class="dep-value"><strong>${d.depBueno}%</strong> dep. buen estado</div>
+                </div>
+            `;
+        }).join('');
+    } catch {
+        grid.innerHTML = '<div class="error-msg">Error al cargar insights</div>';
+    }
+}
+
 loadCategorias();
 renderHistory();
+loadInsights();
