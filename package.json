@@ -1,0 +1,15 @@
+{
+  "name": "smartvaluation",
+  "version": "1.0.0",
+  "description": "Asistente Inteligente de Tasacion y Automatizacion de Ventas",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["tasacion", "ia", "marketplace"],
+  "author": "Oscar Espinoza Landeta",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

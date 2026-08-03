@@ -1,0 +1,51 @@
+categoria,marca,modelo,precio_nuevo,precio_usado_bueno,precio_usado_regular,precio_usado_deficiente
+Celular,Samsung,Galaxy S23,15999,9500,7000,4500
+Celular,Samsung,Galaxy S22,12999,7200,5000,3000
+Celular,Samsung,Galaxy A54,6999,4200,3000,1800
+Celular,Samsung,Galaxy A34,5499,3200,2200,1400
+Celular,Apple,iPhone 15,21999,14500,11000,7000
+Celular,Apple,iPhone 14,17999,11000,8000,5000
+Celular,Apple,iPhone 13,14999,8500,6000,3500
+Celular,Apple,iPhone SE 3,9999,6000,4200,2500
+Celular,Xiaomi,Redmi Note 12,4999,2800,1900,1100
+Celular,Xiaomi,Redmi Note 11,3999,2100,1400,800
+Celular,Motorola,Moto G84,5499,3100,2100,1300
+Celular,Motorola,Moto G54,4499,2500,1700,1000
+Laptop,HP,Pavilion 15,14999,8500,5500,3000
+Laptop,HP,245 G9,7999,4500,2800,1500
+Laptop,Dell,Inspiron 15,13999,7800,5000,2800
+Laptop,Dell, Latitude 5420,12999,7000,4500,2500
+Laptop,Lenovo,IdeaPad 3,10999,6200,4000,2200
+Laptop,Lenovo,ThinkPad E14,12499,7200,4800,2800
+Laptop,Acer,Aspire 5,9999,5500,3500,1800
+Laptop,ASUS,Vivobook 15,11999,6800,4200,2400
+Tablet,Samsung,Galaxy Tab S9,16999,10000,7000,4000
+Tablet,Samsung,Galaxy Tab A9,4999,2800,1800,1000
+Tablet,Apple,iPad 10,11999,7500,5500,3200
+Tablet,Apple,iPad Air 5,14999,9000,6500,4000
+Tablet,Xiaomi,Pad 6,8999,5200,3500,2000
+Consola,Sony,PlayStation 5,12999,9000,7000,4500
+Consola,Sony,PlayStation 4,7999,4500,3000,1800
+Consola,Microsoft,Xbox Series X,11999,8000,5500,3500
+Consola,Microsoft,Xbox One S,5999,3200,2100,1200
+Consola,Nintendo,Switch OLED,8999,6500,5000,3000
+Consola,Nintendo,Switch Lite,4999,3500,2500,1500
+TV,LG,OLED C3 55",24999,15000,10000,6000
+TV,Samsung,QLED 55",19999,12000,8000,5000
+TV,Samsung,Crystal UHD 50",11999,6500,4200,2500
+TV,LG,LED 50",9999,5500,3500,2000
+TV,Sony,Bravia 55",17999,10500,7000,4000
+Audifonos,Sony,WH-1000XM5,6999,4500,3200,1800
+Audifonos,Sony,WH-1000XM4,5499,3500,2400,1400
+Audifonos,Apple,AirPods Pro 2,4999,3500,2500,1500
+Audifonos,Apple,AirPods 3,3499,2400,1700,1000
+Audifonos,JBL,Tune 770NC,2499,1600,1100,600
+Audifonos,Samsung,Galaxy Buds2 Pro,4999,3200,2200,1300
+Lavadora,Whirlpool,15 kg Carga Frontal,13999,8000,5000,2800
+Lavadora,Whirlpool,12 kg Carga Superior,8999,5200,3200,1800
+Refrigerador,Mabe,315L No Frost,15999,9500,6000,3500
+Refrigerador,Samsung,355L No Frost,18999,11500,7500,4200
+Microondas,Whirlpool,20L Digital,3499,2100,1400,800
+Microondas,Samsung,23L Digital,3999,2400,1600,900
+Bicicleta,Giant,ATX 27.5,7999,5000,3500,2000
+Bicicleta,Trek,Marlin 7,14999,9500,6500,3800

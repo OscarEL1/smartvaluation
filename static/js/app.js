@@ -1,0 +1,226 @@
+let currentStep = 1;
+let formData = {
+    categoria: '',
+    marca: '',
+    modelo: '',
+    estado: 'Bueno',
+    accesorios: '',
+};
+
+const steps = {
+    1: loadCategorias,
+    2: loadMarcas,
+    4: loadResultado,
+};
+
+async function loadCategorias() {
+    const grid = document.getElementById('categoria-options');
+    grid.innerHTML = '<div class="loading">Cargando...</div>';
+    try {
+        const res = await fetch('/api/categorias');
+        const cats = await res.json();
+        grid.innerHTML = cats.map(c => `
+            <div class="option-card ${formData.categoria === c ? 'selected' : ''}"
+                 onclick="selectCategoria('${c}')">
+                ${getCatIcon(c)} ${c}
+            </div>
+        `).join('');
+    } catch {
+        grid.innerHTML = '<div class="error-msg">Error al cargar categorias</div>';
+    }
+}
+
+function getCatIcon(cat) {
+    const icons = {
+        'Celular': '📱',
+        'Laptop': '💻',
+        'Tablet': '📟',
+        'Consola': '🎮',
+        'TV': '📺',
+        'Audifonos': '🎧',
+        'Lavadora': '🫧',
+        'Refrigerador': '❄️',
+        'Microondas': '📻',
+        'Bicicleta': '🚲',
+    };
+    return icons[cat] || '📦';
+}
+
+function selectCategoria(cat) {
+    formData.categoria = cat;
+    formData.marca = '';
+    formData.modelo = '';
+    document.querySelectorAll('#categoria-options .option-card').forEach(el => {
+        el.classList.toggle('selected', el.textContent.trim().includes(cat));
+    });
+}
+
+async function loadMarcas() {
+    if (!formData.categoria) return;
+    const select = document.getElementById('marca-select');
+    select.innerHTML = '<option value="">Cargando marcas...</option>';
+    try {
+        const res = await fetch(`/api/marcas?categoria=${encodeURIComponent(formData.categoria)}`);
+        const marcas = await res.json();
+        select.innerHTML = '<option value="">Selecciona una marca</option>' +
+            marcas.map(m => `<option value="${m}" ${formData.marca === m ? 'selected' : ''}>${m}</option>`).join('');
+        document.getElementById('modelo-group').style.display = formData.marca ? 'block' : 'none';
+    } catch {
+        select.innerHTML = '<option value="">Error al cargar</option>';
+    }
+
+    select.onchange = async () => {
+        formData.marca = select.value;
+        formData.modelo = '';
+        document.getElementById('modelo-group').style.display = 'none';
+        if (formData.marca) {
+            const modeloGroup = document.getElementById('modelo-group');
+            modeloGroup.style.display = 'block';
+            const modeloSelect = document.getElementById('modelo-select');
+            modeloSelect.innerHTML = '<option value="">Cargando modelos...</option>';
+            const res = await fetch(`/api/modelos?categoria=${encodeURIComponent(formData.categoria)}&marca=${encodeURIComponent(formData.marca)}`);
+            const modelos = await res.json();
+            modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>' +
+                modelos.map(m => `<option value="${m}">${m}</option>`).join('');
+            modeloSelect.onchange = () => { formData.modelo = modeloSelect.value; };
+        }
+    };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const estadoRadios = document.querySelectorAll('input[name="estado"]');
+    estadoRadios.forEach(r => {
+        r.addEventListener('change', () => { formData.estado = r.value; });
+    });
+});
+
+function updateStepper() {
+    document.querySelectorAll('.step').forEach(el => {
+        const step = parseInt(el.dataset.step);
+        el.classList.remove('active', 'completed');
+        if (step === currentStep) el.classList.add('active');
+        else if (step < currentStep) el.classList.add('completed');
+    });
+
+    document.getElementById('btn-prev').style.display = currentStep > 1 ? 'block' : 'none';
+    document.getElementById('btn-next').textContent = currentStep === 3 ? 'Tasar ahora' : 'Siguiente';
+    document.getElementById('btn-next').disabled = false;
+
+    if (currentStep === 4) {
+        document.querySelector('.nav-buttons').style.display = 'none';
+        document.getElementById('actions').style.display = 'block';
+    } else {
+        document.querySelector('.nav-buttons').style.display = 'flex';
+        document.getElementById('actions').style.display = 'none';
+    }
+}
+
+function showStep(n) {
+    document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+    document.getElementById(`step${n}`).classList.add('active');
+}
+
+document.getElementById('btn-next').addEventListener('click', async () => {
+    if (currentStep === 1 && !formData.categoria) {
+        alert('Selecciona una categoria');
+        return;
+    }
+    if (currentStep === 2 && (!formData.marca || !formData.modelo)) {
+        alert('Selecciona marca y modelo');
+        return;
+    }
+
+    currentStep++;
+    if (currentStep <= 4) {
+        showStep(currentStep);
+        updateStepper();
+        if (steps[currentStep]) await steps[currentStep]();
+    }
+});
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+    if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+        updateStepper();
+    }
+});
+
+async function loadResultado() {
+    const container = document.getElementById('resultado-container');
+    container.innerHTML = '<div class="loading">Calculando precio con IA...</div>';
+
+    formData.accesorios = document.getElementById('accesorios-input')?.value || '';
+
+    try {
+        const res = await fetch('/api/tasar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+
+        if (data.error) {
+            container.innerHTML = `<div class="error-msg">${data.error}</div>`;
+            return;
+        }
+
+        const p = data.precios;
+        container.innerHTML = `
+            <div class="resultado-card">
+                <h3>Rango de precio sugerido</h3>
+                <div class="precio-grid">
+                    <div class="precio-item minimo">
+                        <div class="precio-label">Minimo</div>
+                        <div class="precio-valor">$${p.minimo.toLocaleString()}</div>
+                    </div>
+                    <div class="precio-item sugerido">
+                        <div class="precio-label">Sugerido</div>
+                        <div class="precio-valor">$${p.sugerido.toLocaleString()}</div>
+                    </div>
+                    <div class="precio-item maximo">
+                        <div class="precio-label">Maximo</div>
+                        <div class="precio-valor">$${p.maximo.toLocaleString()}</div>
+                    </div>
+                </div>
+                <div style="text-align:center; font-size:0.8rem; color:#6b7280;">
+                    Precio nuevo: $${p.precio_nuevo.toLocaleString()} &nbsp;|&nbsp;
+                    Depreciacion: ${Math.round((1 - p.sugerido/p.precio_nuevo) * 100)}%
+                </div>
+            </div>
+
+            <div class="resultado-card">
+                <div class="descripcion-box">
+                    <h4>Descripcion para publicar</h4>
+                    <p class="descripcion-text">${data.descripcion}</p>
+                    <button class="copy-btn" onclick="copiarDescripcion()">
+                        Copiar descripcion
+                    </button>
+                </div>
+            </div>
+        `;
+    } catch {
+        container.innerHTML = '<div class="error-msg">Error al conectar con el servidor</div>';
+    }
+}
+
+function copiarDescripcion() {
+    const text = document.querySelector('.descripcion-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copiado!';
+        setTimeout(() => { btn.textContent = 'Copiar descripcion'; }, 2000);
+    });
+}
+
+function reiniciar() {
+    currentStep = 1;
+    formData = { categoria: '', marca: '', modelo: '', estado: 'Bueno', accesorios: '' };
+    showStep(1);
+    updateStepper();
+    loadCategorias();
+    document.getElementById('accesorios-input').value = '';
+    document.querySelector('input[name="estado"][value="Bueno"]').checked = true;
+}
+
+loadCategorias();

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartValuation - Asistente de Tasacion</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SmartValuation</h1>
+            <p class="subtitle">Asistente Inteligente de Tasacion</p>
+        </header>
+
+        <div class="stepper">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <span>Categoria</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <span>Producto</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <span>Estado</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <span>Resultado</span>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <!-- Paso 1: Categoria -->
+            <div class="form-step active" id="step1">
+                <h2>¿Que categoria es tu articulo?</h2>
+                <div class="options-grid" id="categoria-options">
+                    <div class="loading">Cargando categorias...</div>
+                </div>
+            </div>
+
+            <!-- Paso 2: Marca y Modelo -->
+            <div class="form-step" id="step2">
+                <h2>Selecciona marca y modelo</h2>
+                <div class="form-group">
+                    <label>Marca</label>
+                    <select id="marca-select">
+                        <option value="">Selecciona una marca</option>
+                    </select>
+                </div>
+                <div class="form-group" id="modelo-group" style="display:none">
+                    <label>Modelo</label>
+                    <select id="modelo-select">
+                        <option value="">Selecciona un modelo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Paso 3: Estado y Accesorios -->
+            <div class="form-step" id="step3">
+                <h2>Estado del articulo</h2>
+                <div class="estado-options">
+                    <label class="estado-option">
+                        <input type="radio" name="estado" value="Excelente">
+                        <div class="estado-card">
+                            <strong>Excelente</strong>
+                            <span>Sin rayones ni danos visibles</span>
+                        </div>
+                    </label>
+                    <label class="estado-option">
+                        <input type="radio" name="estado" value="Bueno" checked>
+                        <div class="estado-card">
+                            <strong>Bueno</strong>
+                            <span>Uso normal, pequenos signos de uso</span>
+                        </div>
+                    </label>
+                    <label class="estado-option">
+                        <input type="radio" name="estado" value="Regular">
+                        <div class="estado-card">
+                            <strong>Regular</strong>
+                            <span>Raspones o manchas notorios</span>
+                        </div>
+                    </label>
+                    <label class="estado-option">
+                        <input type="radio" name="estado" value="Deficiente">
+                        <div class="estado-card">
+                            <strong>Deficiente</strong>
+                            <span>Danos funcionales o esteticos graves</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-group" style="margin-top:1.5rem">
+                    <label>Accesorios incluidos (opcional)</label>
+                    <input type="text" id="accesorios-input" placeholder="Cargador, caja, funda, etc.">
+                </div>
+            </div>
+
+            <!-- Paso 4: Resultado -->
+            <div class="form-step" id="step4">
+                <h2>Tu propuesta de venta</h2>
+                <div id="resultado-container">
+                    <div class="loading">Calculando precio...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="btn-prev" style="display:none">Atras</button>
+            <button class="btn btn-primary" id="btn-next">Siguiente</button>
+        </div>
+
+        <div class="actions" id="actions" style="display:none">
+            <button class="btn btn-secondary" onclick="reiniciar()"> Tasar otro articulo</button>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
