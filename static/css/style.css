@@ -392,6 +392,24 @@ header h1 {
     font-weight: 600;
 }
 
+/* Chart */
+.chart-container {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+}
+
+.chart-container h4 {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .options-grid {
