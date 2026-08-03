@@ -112,10 +112,18 @@ async function generarDescripcion(categoria, marca, modelo, estado, accesorios) 
     const apiKey = process.env.GROQ_API_KEY || '';
     if (apiKey) {
         try {
-            const accText = accesorios || 'Ninguno';
-            const prompt = `Escribe una descripcion comercial persuasiva y honesta para vender este articulo en un marketplace. 
-El texto debe ser atractivo, destacar puntos positivos, ser transparente sobre el estado y optimizado para busquedas.
-Maximo 100 palabras. Sin emojis. Solo texto plano.
+            const accText = accesorios || 'No incluye';
+            const prompt = `Escribe una descripcion de venta para marketplace estilo MercadoLibre/Facebook Marketplace. 
+Usa emojis llamativos, lenguaje de marketing y ventas, y formato visual atractivo.
+El tono debe ser entusiasta pero honesto. Incluye los accesorios con checkmarks.
+Maximo 120 palabras. Usa emojis en cada linea. No uses negrita ni markdown, solo texto plano con emojis.
+
+Formato:
+- Empieza con un emoji de fuego o similar + marca y modelo + estado
+- Usa emojis de diamante, caja, etc. para resaltar features
+- Lista accesorios con checkmarks (emoji de check)
+- Menciona que funciona al 100%
+- Cierra con call to action
 
 Articulo:
 - Categoria: ${categoria}
@@ -135,8 +143,8 @@ Escribe SOLO la descripcion, sin titulos ni explicaciones.`;
                 body: JSON.stringify({
                     model: 'llama-3.3-70b-versatile',
                     messages: [{ role: 'user', content: prompt }],
-                    max_tokens: 200,
-                    temperature: 0.7,
+                    max_tokens: 300,
+                    temperature: 0.8,
                 }),
             });
             const data = await res.json();
@@ -148,9 +156,14 @@ Escribe SOLO la descripcion, sin titulos ni explicaciones.`;
         }
     }
 
-    let desc = `${marca} ${modelo} en estado ${estado}.`;
-    if (accesorios) desc += ` Incluye: ${accesorios}.`;
-    desc += ' Excelente relacion calidad-precio. Envio disponible.';
+    const accList = accesorios ? accesorios.split(',').map(a => `✅ ${a.trim()}`).join('\n') : '';
+    const estadoEmoji = { Excelente: '🔥', Bueno: '👍', Regular: '⚠️', Deficiente: '📦' }[estado] || '📦';
+    let desc = `${estadoEmoji} ¡${marca} ${modelo} en estado ${estado}!\n`;
+    desc += `💎 ${marca} ${modelo}, articulo en excelente condicion.\n`;
+    if (accList) desc += `📦 Incluye:\n${accList}\n`;
+    desc += `📱 Funciona al 100%, ideal para uso diario.\n`;
+    desc += `💰 Precio negociable. Envio disponible.\n`;
+    desc += `📩 Mandame mensaje si te interesa. ¡No dejes pasar esta oportunidad!`;
     return desc;
 }
 
