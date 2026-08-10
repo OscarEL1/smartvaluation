@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartValuation - Presentacion</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/white.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        :root { --r-main-font:'Inter',sans-serif; --r-heading-font:'Inter',sans-serif; --r-main-color:#1e293b; }
+        .reveal{font-size:26px}.reveal h1{font-size:2.2em;font-weight:800}.reveal h2{font-size:1.5em;font-weight:700;color:#2563eb}.reveal h3{font-size:1.1em;font-weight:600;color:#475569}
+        .title-slide h1{background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:2.6em}
+        .title-slide .sub{color:#64748b;font-size:1em;margin-top:.5em}.title-slide .team{color:#94a3b8;font-size:.65em;margin-top:1.5em}
+        .gbox{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:1.2em;border-radius:14px;margin:.4em 0}.gbox h3{color:#fff;margin-bottom:.2em}
+        .sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6em;margin-top:.4em}
+        .scard{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.8em;text-align:center}
+        .scard .num{font-size:1.8em;font-weight:800;color:#2563eb}.scard .lbl{font-size:.65em;color:#64748b;margin-top:.1em}
+        .fgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6em;margin-top:.4em}
+        .fcard{background:#fff;border:2px solid #e2e8f0;border-radius:10px;padding:.8em;text-align:left}
+        .fcard .em{font-size:1.4em;margin-bottom:.2em}.fcard h4{margin:0;font-size:.85em;color:#1e293b}.fcard p{margin:.2em 0 0;font-size:.65em;color:#64748b}
+        table{width:100%;border-collapse:collapse;font-size:.7em;margin-top:.4em}
+        table th{background:#2563eb;color:#fff;padding:.5em;text-align:left}table td{padding:.4em .5em;border-bottom:1px solid #e2e8f0}
+        table tr:nth-child(even){background:#f8fafc}
+        .cbox{background:#1e293b;color:#e2e8f0;padding:.8em;border-radius:10px;font-family:'Courier New',monospace;font-size:.6em;text-align:left;line-height:1.5}
+        .abox{background:#f0f9ff;border:2px solid #bae6fd;border-radius:10px;padding:.8em;text-align:left;font-family:monospace;font-size:.65em;line-height:1.7}
+        .flow{display:flex;align-items:center;justify-content:center;gap:.3em;margin-top:.8em}
+        .fstep{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:.6em .8em;border-radius:8px;font-size:.65em;font-weight:600;text-align:center;min-width:90px}
+        .farrow{font-size:1.1em;color:#94a3b8}
+        .dbar{display:flex;align-items:center;gap:.4em;margin:.25em 0}
+        .dlbl{width:85px;font-size:.7em;text-align:right;font-weight:600}
+        .dbbg{flex:1;background:#e2e8f0;border-radius:5px;height:20px;overflow:hidden}
+        .dbfill{height:100%;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#fff;font-size:.6em;font-weight:700}
+        .cbox2{background:linear-gradient(135deg,#059669,#10b981);color:#fff;padding:1.2em;border-radius:14px;text-align:center}
+        .cbox2 h3{color:#fff}
+        .badge{display:inline-block;background:#dcfce7;color:#166534;padding:.25em .7em;border-radius:16px;font-weight:700;font-size:.9em}
+        .sdiv{background:linear-gradient(135deg,#2563eb,#7c3aed)}.sdiv h2{color:#fff!important}.sdiv p{color:rgba(255,255,255,.8)}
+        .reveal .slides section{padding:30px}
+    </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+<section class="title-slide">
+    <h1>SmartValuation</h1>
+    <p class="sub">Asistente Inteligente de Tasacion<br>y Automatizacion de Ventas</p>
+    <p class="team"><strong>Extraccion de Conocimiento de Base de Datos</strong><br><br>
+    Oscar Espinoza Landeta<br>Emmanuel Castro Salvador<br>Fernando Vasquez Valeriano<br>Fatima Avelino Celis<br><br>
+    Universidad Tecnologica de Tehuacan — 2026</p>
+</section>
+
+<section>
+    <h2>El Problema</h2><h3>Paralisis del Vendedor</h3>
+    <div class="fgrid">
+        <div class="fcard"><div class="em">😰</div><h4>Falta de criterio</h4><p>No saben cuanto vale realmente su articulo usado en el mercado actual</p></div>
+        <div class="fcard"><div class="em">✍️</div><h4>Paralisis ante la redaccion</h4><p>No saben como describir el producto de forma atractiva para vender</p></div>
+        <div class="fcard"><div class="em">📦</div><h4>Articulos estancados</h4><p>Productos utiles que permanecen almacenados indefinidamente</p></div>
+        <div class="fcard"><div class="em">💡</div><h4>Solucion SmartValuation</h4><p>Automatizamos la tasacion y la creacion de contenido para vender</p></div>
+    </div>
+</section>
+
+<section>
+    <h2>Que es SmartValuation?</h2>
+    <div class="gbox"><h3>Plataforma web inteligente que automatiza:</h3>
+    <p style="font-size:1em;margin-top:.4em"><strong>1.</strong> Extraccion de precios del mercado real<br>
+    <strong>2.</strong> Calculo inteligente del rango optimo de venta<br>
+    <strong>3.</strong> Generacion de contenido persuasivo con IA</p></div>
+    <div class="sgrid">
+        <div class="scard"><div class="num">84</div><div class="lbl">Productos extraidos</div></div>
+        <div class="scard"><div class="num">10</div><div class="lbl">Categorias</div></div>
+        <div class="scard"><div class="num">~3s</div><div class="lbl">Tiempo de respuesta</div></div>
+    </div>
+</section>
+
+<section class="sdiv">
+    <h2>Arquitectura del Sistema</h2>
+    <p style="color:rgba(255,255,255,.7)">Como esta construida la aplicacion</p>
+</section>
+
+<section>
+    <h2>Arquitectura</h2>
+    <div class="abox">
+        <strong>FRONTEND</strong> (HTML + CSS + JS)<br>
+        Stepper Form → Grafica → Descripcion IA → Links<br><br>
+        <strong>BACKEND</strong> (Node.js + Express 5)<br>
+        Motor de Precios → Buscador de Productos → Generador IA (Groq/Llama3)<br><br>
+        <strong>BASE DE DATOS</strong> (CSV - 84 productos)<br>
+        Extraccion de MercadoLibre Mexico 2026
+    </div>
+    <div class="fgrid" style="margin-top:.5em">
+        <div class="fcard"><div class="em">⚡</div><h4>Node.js + Express 5</h4><p>Backend rapido y ligero</p></div>
+        <div class="fcard"><div class="em">🤖</div><h4>Groq API + Llama 3.3</h4><p>IA generativa gratis</p></div>
+        <div class="fcard"><div class="em">📊</div><h4>Chart.js</h4><p>Graficas interactivas</p></div>
+        <div class="fcard"><div class="em">☁️</div><h4>Render Free Tier</h4><p>Deploy automatico $0</p></div>
+    </div>
+</section>
+
+<section class="sdiv">
+    <h2>Extraccion de Conocimiento</h2>
+    <p style="color:rgba(255,255,255,.7)">De donde viene la informacion</p>
+</section>
+
+<section>
+    <h2>Fuentes de Datos</h2>
+    <table>
+        <tr><th>Fuente</th><th>Metodo</th><th>Datos Obtenidos</th></tr>
+        <tr><td>MercadoLibre Mexico</td><td>Extraccion manual + API</td><td>Precios de 84 productos reales</td></tr>
+        <tr><td>MercadoLibre</td><td>Clasificacion por categorias</td><td>10 categorias de productos</td></tr>
+        <tr><td>MercadoLibre</td><td>Analisis de depreciacion</td><td>Factores de estado fisico</td></tr>
+    </table>
+    <h3 style="margin-top:.6em">Estructura del Conocimiento</h3>
+    <div class="cbox">categoria, marca, modelo, precio_nuevo,<br>precio_usado_bueno, precio_usado_regular, precio_usado_deficiente<br><br>
+    Ejemplo: Celular,Samsung,Galaxy S23,14999,8800,6500,4000</div>
+</section>
+
+<section>
+    <h2>Dataset Extraido</h2>
+    <table>
+        <tr><th>Categoria</th><th>Productos</th><th>Rango de Precios</th></tr>
+        <tr><td>Celular</td><td>26</td><td>$3,499 - $29,999</td></tr>
+        <tr><td>Laptop</td><td>12</td><td>$7,499 - $24,999</td></tr>
+        <tr><td>Audifonos</td><td>10</td><td>$1,999 - $12,999</td></tr>
+        <tr><td>Consola</td><td>9</td><td>$4,499 - $12,499</td></tr>
+        <tr><td>TV</td><td>7</td><td>$8,499 - $22,999</td></tr>
+        <tr><td>Tablet</td><td>6</td><td>$4,499 - $13,999</td></tr>
+        <tr><td>Electrodomesticos</td><td>14</td><td>$2,999 - $19,999</td></tr>
+    </table>
+    <div class="sgrid" style="margin-top:.4em">
+        <div class="scard"><div class="num">84</div><div class="lbl">Productos totales</div></div>
+        <div class="scard"><div class="num">588</div><div class="lbl">Datos de precios</div></div>
+        <div class="scard"><div class="num">10</div><div class="lbl">Categorias</div></div>
+    </div>
+</section>
+
+<section class="sdiv">
+    <h2>Algoritmo de Precios</h2>
+    <p style="color:rgba(255,255,255,.7)">Como calculamos el rango optimo</p>
+</section>
+
+<section>
+    <h2>Formula de Tasacion</h2>
+    <div class="cbox">precio_sugerido = precio_usado_base x multiplicador_estado<br><br>
+variacion = max(500, precio_sugerido x factor_categoria)<br><br>
+precio_minimo = precio_sugerido - variacion<br>
+precio_maximo = precio_sugerido + variacion</div>
+    <h3 style="margin-top:.5em">Multiplicadores por Estado</h3>
+    <table>
+        <tr><th>Estado</th><th>Factor</th><th>Justificacion</th></tr>
+        <tr><td>Excelente</td><td>+12%</td><td>Practicamente nuevo</td></tr>
+        <tr><td>Bueno</td><td>100%</td><td>Uso normal</td></tr>
+        <tr><td>Regular</td><td>-22%</td><td>Danos visibles</td></tr>
+        <tr><td>Deficiente</td><td>-45%</td><td>Danos funcionales</td></tr>
+    </table>
+</section>
+
+<section>
+    <h2>Ejemplo Real: Galaxy S23</h2>
+    <div class="sgrid">
+        <div class="scard"><div class="num">$14,999</div><div class="lbl">Precio Nuevo</div></div>
+        <div class="scard" style="border:2px solid #059669"><div class="num" style="color:#059669">$8,800</div><div class="lbl">Sugerido (Bueno)</div></div>
+        <div class="scard"><div class="num">41%</div><div class="lbl">Depreciacion</div></div>
+    </div>
+    <div style="display:flex;gap:.5em;margin-top:.5em;justify-content:center">
+        <div style="background:#fee2e2;padding:.5em 1em;border-radius:8px;font-size:.75em">Min: $8,100</div>
+        <div style="background:#d1fae5;padding:.5em 1em;border-radius:8px;font-size:.75em;font-weight:700">Sugerido: $8,800</div>
+        <div style="background:#dbeafe;padding:.5em 1em;border-radius:8px;font-size:.75em">Max: $9,500</div>
+    </div>
+</section>
+
+<section class="sdiv">
+    <h2>Insights de Mercado</h2>
+    <p style="color:rgba(255,255,255,.7)">Conocimiento extraido del mercado</p>
+</section>
+
+<section>
+    <h2>Depreciacion por Categoria</h2>
+    <div class="dbar"><div class="dlbl">Consola</div><div class="dbbg"><div class="dbfill" style="width:35%;background:#059669">35%</div></div></div>
+    <div class="dbar"><div class="dlbl">Audifonos</div><div class="dbbg"><div class="dbfill" style="width:36%;background:#059669">36%</div></div></div>
+    <div class="dbar"><div class="dlbl">Bicicleta</div><div class="dbbg"><div class="dbfill" style="width:38%;background:#10b981">38%</div></div></div>
+    <div class="dbar"><div class="dlbl">Tablet</div><div class="dbbg"><div class="dbfill" style="width:39%;background:#10b981">39%</div></div></div>
+    <div class="dbar"><div class="dlbl">Celular</div><div class="dbbg"><div class="dbfill" style="width:41%;background:#d97706">41%</div></div></div>
+    <div class="dbar"><div class="dlbl">TV</div><div class="dbbg"><div class="dbfill" style="width:43%;background:#d97706">43%</div></div></div>
+    <div class="dbar"><div class="dlbl">Laptop</div><div class="dbbg"><div class="dbfill" style="width:44%;background:#d97706">44%</div></div></div>
+    <div class="dbar"><div class="dlbl">Lavadora</div><div class="dbbg"><div class="dbfill" style="width:45%;background:#dc2626">45%</div></div></div>
+    <p style="font-size:.65em;color:#64748b;margin-top:.4em;text-align:center">Depreciacion promedio en estado Bueno vs precio nuevo</p>
+</section>
+
+<section class="sdiv">
+    <h2>Proceso de Extraccion</h2>
+    <p style="color:rgba(255,255,255,.7)">Flujo de datos completo</p>
+</section>
+
+<section>
+    <h2>Flujo de Datos</h2>
+    <div class="flow">
+        <div class="fstep">Usuario<br>ingresa datos</div>
+        <div class="farrow">→</div>
+        <div class="fstep">Busqueda<br>en CSV</div>
+        <div class="farrow">→</div>
+        <div class="fstep">Calculo<br>de precios</div>
+        <div class="farrow">→</div>
+        <div class="fstep">Generacion<br>con IA</div>
+        <div class="farrow">→</div>
+        <div class="fstep">Resultado<br>al usuario</div>
+    </div>
+    <h3 style="margin-top:.6em">Endpoints API</h3>
+    <table>
+        <tr><th>Metodo</th><th>Ruta</th><th>Funcion</th></tr>
+        <tr><td>GET</td><td>/api/categorias</td><td>Extrae categorias unicas del CSV</td></tr>
+        <tr><td>GET</td><td>/api/marcas</td><td>Filtra marcas por categoria</td></tr>
+        <tr><td>GET</td><td>/api/modelos</td><td>Filtra modelos por marca</td></tr>
+        <tr><td>POST</td><td>/api/tasar</td><td>Calcula precios + genera descripcion IA</td></tr>
+        <tr><td>GET</td><td>/api/insights</td><td>Estadisticas de depreciacion</td></tr>
+    </table>
+</section>
+
+<section>
+    <h2>Respuesta del Sistema</h2>
+    <div class="cbox">{<br>
+&nbsp;&nbsp;"precios": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"minimo": 8100,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"sugerido": 8800,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"maximo": 9500,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"precio_nuevo": 14999<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;"descripcion": "Samsung Galaxy S23 en buen estado...",<br>
+&nbsp;&nbsp;"producto": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"categoria": "Celular",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"marca": "Samsung",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"modelo": "Galaxy S23"<br>
+&nbsp;&nbsp;}<br>
+}</div>
+</section>
+
+<section class="sdiv">
+    <h2>Funcionalidades</h2>
+    <p style="color:rgba(255,255,255,.7)">8 features implementadas</p>
+</section>
+
+<section>
+    <h2>Funcionalidades</h2>
+    <div class="fgrid">
+        <div class="fcard"><div class="em">📋</div><h4>Stepper Form</h4><p>4 pasos: Categoria, Producto, Estado, Resultado</p></div>
+        <div class="fcard"><div class="em">💰</div><h4>Motor de Precios</h4><p>Rango min/sugerido/max con factores reales</p></div>
+        <div class="fcard"><div class="em">🤖</div><h4>IA Generativa</h4><p>Descripciones con emojis y marketing</p></div>
+        <div class="fcard"><div class="em">📊</div><h4>Grafica de Precios</h4><p>Barras comparativas con Chart.js</p></div>
+        <div class="fcard"><div class="em">📜</div><h4>Historial</h4><p>Ultimas 10 tasaciones en localStorage</p></div>
+        <div class="fcard"><div class="em">📈</div><h4>Insights</h4><p>Depreciacion promedio por categoria</p></div>
+        <div class="fcard"><div class="em">🔗</div><h4>Links Marketplaces</h4><p>Botones a ML, Facebook, Amazon</p></div>
+        <div class="fcard"><div class="em">✨</div><h4>Typewriter Effect</h4><p>Descripcion palabra por palabra</p></div>
+    </div>
+</section>
+
+<section class="sdiv">
+    <h2>Resultados</h2>
+    <p style="color:rgba(255,255,255,.7)">Metricas del proyecto</p>
+</section>
+
+<section>
+    <h2>Resultados y Metricas</h2>
+    <div class="sgrid">
+        <div class="scard"><div class="num">588</div><div class="lbl">Datos de precios extraidos</div></div>
+        <div class="scard"><div class="num">40</div><div class="lbl">Factores de depreciacion</div></div>
+        <div class="scard"><div class="num">5</div><div class="lbl">Endpoints API</div></div>
+    </div>
+    <div class="sgrid" style="margin-top:.4em">
+        <div class="scard"><div class="num">~3s</div><div class="lbl">Tiempo total de respuesta</div></div>
+        <div class="scard"><div class="num">0</div><div class="lbl">Costo total (pesos)</div></div>
+        <div class="scard"><div class="num">100%</div><div class="lbl">Funcional</div></div>
+    </div>
+    <div style="text-align:center;margin-top:.5em"><span class="badge">Costo Total: $0 MXN</span></div>
+</section>
+
+<section>
+    <h2>Tecnologias Utilizadas</h2>
+    <table>
+        <tr><th>Capa</th><th>Tecnologia</th><th>Funcion</th></tr>
+        <tr><td>Extraccion</td><td>CSV + Node.js FS</td><td>Lectura de base de datos</td></tr>
+        <tr><td>Busqueda</td><td>Algoritmo 5 niveles</td><td>Matching de productos</td></tr>
+        <tr><td>Calculo</td><td>Formula matematica</td><td>Precios optimizados</td></tr>
+        <tr><td>IA Generativa</td><td>Groq + Llama 3.3</td><td>Descripciones persuasivas</td></tr>
+        <tr><td>Graficas</td><td>Chart.js</td><td>Visualizacion de precios</td></tr>
+        <tr><td>Deploy</td><td>Render + GitHub</td><td>Hosting automatico</td></tr>
+    </table>
+</section>
+
+<section class="sdiv">
+    <h2>Conclusiones</h2>
+    <p style="color:rgba(255,255,255,.7)">Aplicacion de la materia</p>
+</section>
+
+<section>
+    <h2>Conclusiones</h2>
+    <div class="fgrid">
+        <div class="fcard"><div class="em">✅</div><h4>Extraccion exitosa</h4><p>84 productos con precios reales del mercado mexicano</p></div>
+        <div class="fcard"><div class="em">✅</div><h4>Algoritmo inteligente</h4><p>Considera categoria y estado del articulo</p></div>
+        <div class="fcard"><div class="em">✅</div><h4>IA generativa</h4><p>Descripciones persuasivas con emojis</p></div>
+        <div class="fcard"><div class="em">✅</div><h4>Deploy automatico</h4><p>Produccion sin costo alguno</p></div>
+    </div>
+    <div class="cbox2" style="margin-top:.5em">
+        <h3>Aplicacion de la Materia</h3>
+        <p style="font-size:.8em">Extraccion → Estructuracion → Procesamiento → Conocimiento → Presentacion</p>
+    </div>
+</section>
+
+<section class="title-slide">
+    <h1>Gracias</h1>
+    <p class="sub">SmartValuation</p>
+    <p class="team">
+        <strong>Preguntas?</strong><br><br>
+        <span class="badge">Demo: smartvaluation.onrender.com</span><br><br>
+        Oscar Espinoza Landeta<br>
+        Emmanuel Castro Salvador<br>
+        Fernando Vasquez Valeriano<br>
+        Fatima Avelino Celis<br><br>
+        Universidad Tecnologica de Tehuacan — 2026
+    </p>
+</section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.min.js"></script>
+<script>Reveal.initialize({hash:true,slideNumber:true,transition:'slide',backgroundTransition:'fade'});</script>
+</body>
+</html>
