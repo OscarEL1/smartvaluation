@@ -563,23 +563,21 @@ Formato: {{"demanda":"...", "tendencia":"...", "momento":"...", "consejos":["tip
 @app.post("/api/detectar-foto")
 async def detectar_foto(params: VisionParams):
     """Detectar producto desde foto usando Google Cloud Vision (si esta configurado)."""
-    creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON", "")
     creds_b64 = os.environ.get("GOOGLE_CREDENTIALS_JSON_B64", "")
-    if not creds_json and not creds_b64:
+    if not creds_b64:
         return {
             "detectado": False,
-            "mensaje": "Google Cloud Vision no esta configurado. Agrega la variable GOOGLE_CREDENTIALS_JSON_B64.",
+            "mensaje": "Google Cloud Vision no esta configurado. Agrega GOOGLE_CREDENTIALS_JSON_B64.",
             "etiquetas": [],
         }
 
     try:
         from google.cloud import vision
-        from google.oauth2 import service_account
+        import tempfile, json as _json
 
-        raw = creds_b64 or creds_json
-        if not raw.strip().startswith("{"):
-            raw = base64.b64decode(raw).decode("utf-8")
-        creds_dict = json.loads(raw)
+        raw = base64.b64decode(creds_b64).decode("utf-8")
+        creds_dict = _json.loads(raw)
+
         if "private_key" in creds_dict:
             pk = creds_dict["private_key"]
             pk = pk.replace("\\n", "\n").replace("\\r", "")
@@ -587,8 +585,15 @@ async def detectar_foto(params: VisionParams):
             if not pk.endswith("\n"):
                 pk += "\n"
             creds_dict["private_key"] = pk
-        creds = service_account.Credentials.from_service_account_info(creds_dict)
-        client = vision.ImageAnnotatorClient(credentials=creds)
+
+        tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
+        tmp.write(_json.dumps(creds_dict))
+        tmp.close()
+
+        client = vision.ImageAnnotatorClient.from_service_account_file(tmp.name)
+
+        import os as _os
+        _os.unlink(tmp.name)
 
         img_bytes = base64.b64decode(params.imagen)
         image = vision.Image(content=img_bytes)
