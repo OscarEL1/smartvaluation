@@ -149,21 +149,32 @@ def calcular_comparacion(precios: dict, producto: dict) -> dict:
 async def llamar_groq(prompt: str, max_tokens: int = 300, temperature: float = 0.8) -> str:
     api_key = os.environ.get("GROQ_API_KEY", "")
     if not api_key:
+        print("GROQ_API_KEY no configurada")
         return ""
 
-    async with httpx.AsyncClient(timeout=30) as client:
-        resp = await client.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": "llama-3.3-70b-versatile",
-                "messages": [{"role": "user", "content": prompt}],
-                "max_tokens": max_tokens,
-                "temperature": temperature,
-            },
-        )
-        data = resp.json()
-        return data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                },
+            )
+            data = resp.json()
+            if "error" in data:
+                print(f"Groq API error: {data['error']}")
+                return ""
+            return data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+    except httpx.TimeoutException:
+        print("Groq timeout")
+        return ""
+    except Exception as e:
+        print(f"Groq exception: {e}")
+        return ""
 
 
 async def generar_descripcion(categoria, marca, modelo, estado, accesorios, idioma="both") -> str:
@@ -328,10 +339,17 @@ async def tasar(params: TasarParams):
 
     precios = calcular_precio(producto, params.estado)
     comparacion = calcular_comparacion(precios, producto)
-    descripcion = await generar_descripcion(
-        params.categoria, params.marca, params.modelo,
-        params.estado, params.accesorios, params.idioma,
-    )
+
+    try:
+        descripcion = await generar_descripcion(
+            params.categoria, params.marca, params.modelo,
+            params.estado, params.accesorios, params.idioma,
+        )
+    except Exception as e:
+        print(f"Error generando descripcion: {e}")
+        acc_text = params.accesorios or "No incluye"
+        descripcion = f"📱 {params.marca} {params.modelo} en estado {params.estado}. "
+        descripcion += f"Incluye: {acc_text}. Excelente relacion calidad-precio. Envio disponible."
 
     return {
         "precios": precios,
