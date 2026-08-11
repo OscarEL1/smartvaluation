@@ -243,7 +243,6 @@ async function loadResultado() {
 
         // Configurar tabs y links
         document.getElementById('results-tabs').style.display = 'block';
-        const query = encodeURIComponent(`${formData.marca} ${formData.modelo}`);
         document.getElementById('ml-link').href = `https://listado.mercadolibre.com.mx/${query}`;
         document.getElementById('fb-link').href = `https://www.facebook.com/marketplace/search?q=${query}`;
         document.getElementById('amz-link').href = `https://www.amazon.com.mx/s?k=${query}`;
