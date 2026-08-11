@@ -563,17 +563,21 @@ Formato: {{"demanda":"...", "tendencia":"...", "momento":"...", "consejos":["tip
 @app.post("/api/detectar-foto")
 async def detectar_foto(params: VisionParams):
     """Detectar producto desde foto usando Google Cloud Vision (si esta configurado)."""
-    creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
-    if not creds_path or not os.path.exists(creds_path):
+    creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON", "")
+    if not creds_json:
         return {
             "detectado": False,
-            "mensaje": "Google Cloud Vision no esta configurado. Sube las credenciales JSON.",
+            "mensaje": "Google Cloud Vision no esta configurado. Agrega la variable GOOGLE_CREDENTIALS_JSON.",
             "etiquetas": [],
         }
 
     try:
         from google.cloud import vision
-        client = vision.ImageAnnotatorClient()
+        from google.oauth2 import service_account
+
+        creds_dict = json.loads(creds_json)
+        creds = service_account.Credentials.from_service_account_info(creds_dict)
+        client = vision.ImageAnnotatorClient(credentials=creds)
 
         img_bytes = base64.b64decode(params.imagen)
         image = vision.Image(content=img_bytes)
