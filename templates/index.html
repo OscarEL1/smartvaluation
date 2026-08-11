@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartValuation - Asistente de Tasacion</title>
+    <title>SmartValuation - Asistente de Tasacion con IA</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
@@ -11,7 +11,7 @@
     <div class="container">
         <header>
             <h1>SmartValuation</h1>
-            <p class="subtitle">Asistente Inteligente de Tasacion</p>
+            <p class="subtitle">Asistente Inteligente de Tasacion con IA</p>
         </header>
 
         <div class="stepper">
@@ -39,7 +39,14 @@
         <div class="form-card">
             <!-- Paso 1: Categoria -->
             <div class="form-step active" id="step1">
-                <h2>¿Que categoria es tu articulo?</h2>
+                <h2>Que categoria es tu articulo?</h2>
+                <div class="photo-upload-area">
+                    <input type="file" id="fotoInput" accept="image/*" hidden>
+                    <button class="btn-photo" onclick="document.getElementById('fotoInput').click()">
+                        Subir foto (opcional - detecta producto automaticamente)
+                    </button>
+                    <div id="deteccion-resultado" class="hidden"></div>
+                </div>
                 <div class="options-grid" id="categoria-options">
                     <div class="spinner-container"><div class="spinner"></div></div>
                 </div>
@@ -64,7 +71,7 @@
                 <div class="field-error" id="error-step2"></div>
             </div>
 
-            <!-- Paso 3: Estado y Accesorios -->
+            <!-- Paso 3: Estado, Accesorios, Idioma -->
             <div class="form-step" id="step3">
                 <h2>Estado del articulo</h2>
                 <div class="estado-options">
@@ -101,6 +108,14 @@
                     <label>Accesorios incluidos (opcional)</label>
                     <input type="text" id="accesorios-input" placeholder="Cargador, caja, funda, etc.">
                 </div>
+                <div class="form-group">
+                    <label>Idioma de la descripcion</label>
+                    <select id="idioma-select">
+                        <option value="both">Espanol + Ingles</option>
+                        <option value="es">Solo Espanol</option>
+                        <option value="en">Solo Ingles</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Paso 4: Resultado -->
@@ -112,6 +127,34 @@
                 <div class="chart-container" id="chart-container" style="display:none">
                     <canvas id="priceChart"></canvas>
                 </div>
+
+                <!-- Comparacion inteligente -->
+                <div id="comparacion-container" class="hidden"></div>
+
+                <!-- Prediccion de depreciacion -->
+                <div id="prediccion-container" class="hidden">
+                    <h3>Prediccion de Precio (12 meses)</h3>
+                    <canvas id="prediccionChart"></canvas>
+                    <div id="prediccion-info"></div>
+                </div>
+
+                <!-- Analisis de mercado -->
+                <div id="analisis-container" class="hidden">
+                    <h3>Analisis de Mercado (IA)</h3>
+                    <div id="analisis-content"></div>
+                </div>
+
+                <!-- Chatbot -->
+                <div id="chat-container" class="hidden">
+                    <h3>Preguntale a la IA</h3>
+                    <div id="chat-messages"></div>
+                    <div class="chat-input-row">
+                        <input type="text" id="chat-input" placeholder="Ej: Es buen precio? Cuanto tarda en venderse?">
+                        <button class="btn-chat-send" onclick="enviarChat()">Enviar</button>
+                    </div>
+                </div>
+
+                <!-- Dashboard Insights -->
                 <div class="dashboard-section" id="dashboard-section">
                     <h3>Insights de mercado</h3>
                     <p class="dashboard-subtitle">Depreciacion promedio por categoria (estado Bueno)</p>

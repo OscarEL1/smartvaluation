@@ -5,8 +5,10 @@ let formData = {
     modelo: '',
     estado: 'Bueno',
     accesorios: '',
+    idioma: 'both',
 };
 let priceChart = null;
+let prediccionChart = null;
 const HISTORY_KEY = 'smartvaluation_history';
 
 const steps = {
@@ -15,6 +17,9 @@ const steps = {
     4: loadResultado,
 };
 
+// ---------------------------------------------------------------------------
+// Categorias
+// ---------------------------------------------------------------------------
 async function loadCategorias() {
     const grid = document.getElementById('categoria-options');
     grid.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>';
@@ -34,16 +39,9 @@ async function loadCategorias() {
 
 function getCatIcon(cat) {
     const icons = {
-        'Celular': '📱',
-        'Laptop': '💻',
-        'Tablet': '📟',
-        'Consola': '🎮',
-        'TV': '📺',
-        'Audifonos': '🎧',
-        'Lavadora': '🫧',
-        'Refrigerador': '❄️',
-        'Microondas': '📻',
-        'Bicicleta': '🚲',
+        'Celular': '📱', 'Laptop': '💻', 'Tablet': '📟', 'Consola': '🎮',
+        'TV': '📺', 'Audifonos': '🎧', 'Lavadora': '🫧', 'Refrigerador': '❄️',
+        'Microondas': '📻', 'Bicicleta': '🚲',
     };
     return icons[cat] || '📦';
 }
@@ -57,6 +55,9 @@ function selectCategoria(cat) {
     });
 }
 
+// ---------------------------------------------------------------------------
+// Marcas y Modelos
+// ---------------------------------------------------------------------------
 async function loadMarcas() {
     if (!formData.categoria) return;
     const select = document.getElementById('marca-select');
@@ -89,13 +90,18 @@ async function loadMarcas() {
     };
 }
 
+// ---------------------------------------------------------------------------
+// Estado radios
+// ---------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    const estadoRadios = document.querySelectorAll('input[name="estado"]');
-    estadoRadios.forEach(r => {
+    document.querySelectorAll('input[name="estado"]').forEach(r => {
         r.addEventListener('change', () => { formData.estado = r.value; });
     });
 });
 
+// ---------------------------------------------------------------------------
+// Stepper
+// ---------------------------------------------------------------------------
 function updateStepper() {
     document.querySelectorAll('.step').forEach(el => {
         const step = parseInt(el.dataset.step);
@@ -131,6 +137,9 @@ function clearFieldErrors() {
     document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
 }
 
+// ---------------------------------------------------------------------------
+// Navigation
+// ---------------------------------------------------------------------------
 document.getElementById('btn-next').addEventListener('click', async () => {
     clearFieldErrors();
     if (currentStep === 1 && !formData.categoria) {
@@ -162,11 +171,15 @@ document.getElementById('btn-prev').addEventListener('click', () => {
     }
 });
 
+// ---------------------------------------------------------------------------
+// Resultado
+// ---------------------------------------------------------------------------
 async function loadResultado() {
     const container = document.getElementById('resultado-container');
     container.innerHTML = '<div class="spinner-container"><div class="spinner"></div><p class="spinner-text">Calculando precio con IA...</p></div>';
 
     formData.accesorios = document.getElementById('accesorios-input')?.value || '';
+    formData.idioma = document.getElementById('idioma-select')?.value || 'both';
 
     try {
         const res = await fetch('/api/tasar', {
@@ -182,7 +195,9 @@ async function loadResultado() {
         }
 
         const p = data.precios;
+        const c = data.comparacion;
         const query = encodeURIComponent(`${formData.marca} ${formData.modelo}`);
+
         container.innerHTML = `
             <div class="resultado-card">
                 <h3>Rango de precio sugerido</h3>
@@ -191,7 +206,7 @@ async function loadResultado() {
                         <div class="precio-label">Minimo</div>
                         <div class="precio-valor">$${p.minimo.toLocaleString()}</div>
                     </div>
-                    <div class="precio-item sugerido">
+                    <div class precio-item sugerido">
                         <div class="precio-label">Sugerido</div>
                         <div class="precio-valor">$${p.sugerido.toLocaleString()}</div>
                     </div>
@@ -204,6 +219,13 @@ async function loadResultado() {
                     Precio nuevo: $${p.precio_nuevo.toLocaleString()} &nbsp;|&nbsp;
                     Depreciacion: ${Math.round((1 - p.sugerido/p.precio_nuevo) * 100)}%
                 </div>
+            </div>
+
+            <div class="comparacion-card">
+                <h4>Comparacion de mercado</h4>
+                <p>Tu precio esta <strong>${c.posicion}</strong></p>
+                <p>Promedio de la categoria: <strong>$${c.precio_promedio_mercado.toLocaleString()}</strong> (${c.total_productos_categoria} productos)</p>
+                <p class="recomendacion-text">${c.recomendacion}</p>
             </div>
 
             <div class="marketplace-links">
@@ -231,15 +253,24 @@ async function loadResultado() {
                 </div>
             </div>
         `;
+
         renderChart(p);
         saveHistory(formData, p);
         typewriterEffect(document.getElementById('desc-text'), data.descripcion);
+
+        // Cargar features de IA en paralelo
+        loadPrediccion(p.sugerido, formData.categoria);
+        loadAnalisisMercado(formData.marca, formData.modelo);
+        document.getElementById('chat-container').classList.remove('hidden');
 
     } catch {
         container.innerHTML = '<div class="error-msg">Error al conectar con el servidor</div>';
     }
 }
 
+// ---------------------------------------------------------------------------
+// Typewriter
+// ---------------------------------------------------------------------------
 function typewriterEffect(el, text) {
     let i = 0;
     el.innerHTML = '<span class="cursor">|</span>';
@@ -266,22 +297,12 @@ function copiarDescripcion() {
     });
 }
 
-function reiniciar() {
-    currentStep = 1;
-    formData = { categoria: '', marca: '', modelo: '', estado: 'Bueno', accesorios: '' };
-    showStep(1);
-    updateStepper();
-    loadCategorias();
-    document.getElementById('accesorios-input').value = '';
-    document.querySelector('input[name="estado"][value="Bueno"]').checked = true;
-    document.getElementById('chart-container').style.display = 'none';
-    if (priceChart) { priceChart.destroy(); priceChart = null; }
-}
-
+// ---------------------------------------------------------------------------
+// Chart
+// ---------------------------------------------------------------------------
 function renderChart(precios) {
     const container = document.getElementById('chart-container');
     container.style.display = 'block';
-
     if (priceChart) priceChart.destroy();
 
     const ctx = document.getElementById('priceChart').getContext('2d');
@@ -311,30 +332,231 @@ function renderChart(precios) {
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => `$${ctx.raw.toLocaleString()}`
-                    }
-                }
-            },
+            plugins: { legend: { display: false } },
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
-                        callback: v => '$' + v.toLocaleString()
-                    },
+                    ticks: { callback: v => '$' + v.toLocaleString() },
                     grid: { color: 'rgba(0,0,0,0.05)' }
                 },
-                x: {
-                    grid: { display: false }
-                }
+                x: { grid: { display: false } }
             }
         }
     });
 }
 
+// ---------------------------------------------------------------------------
+// Prediccion de depreciacion
+// ---------------------------------------------------------------------------
+async function loadPrediccion(precio, categoria) {
+    const container = document.getElementById('prediccion-container');
+    try {
+        const res = await fetch(`/api/prediccion?precio=${precio}&categoria=${encodeURIComponent(categoria)}&meses=12`);
+        const data = await res.json();
+        container.classList.remove('hidden');
+
+        const info = document.getElementById('prediccion-info');
+        info.innerHTML = `
+            <div class="prediccion-info-cards">
+                <div class="pred-card">
+                    <span class="pred-label">Depreciacion mensual</span>
+                    <span class="pred-value">${data.depreciacion_mensual}%</span>
+                </div>
+                <div class="pred-card">
+                    <span class="pred-label">Mejor momento</span>
+                    <span class="pred-value">${data.mejor_momento}</span>
+                </div>
+                <div class="pred-card">
+                    <span class="pred-label">Recomendacion</span>
+                    <span class="pred-value-sm">${data.venta_recomendada}</span>
+                </div>
+            </div>
+        `;
+
+        if (prediccionChart) prediccionChart.destroy();
+        const ctx = document.getElementById('prediccionChart').getContext('2d');
+        prediccionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.predicciones.map(p => `Mes ${p.mes}`),
+                datasets: [{
+                    label: 'Precio estimado',
+                    data: data.predicciones.map(p => p.precio),
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 3,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        ticks: { callback: v => '$' + v.toLocaleString() },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    } catch {
+        container.classList.add('hidden');
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Analisis de mercado
+// ---------------------------------------------------------------------------
+async function loadAnalisisMercado(marca, modelo) {
+    const container = document.getElementById('analisis-container');
+    const content = document.getElementById('analisis-content');
+    try {
+        const res = await fetch('/api/analisis-mercado', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ marca, modelo }),
+        });
+        const data = await res.json();
+        container.classList.remove('hidden');
+
+        const demandaColor = data.demanda === 'Alta' ? '#059669' : data.demanda === 'Media' ? '#d97706' : '#dc2626';
+        const tendenciaIcon = data.tendencia === 'Subiendo' ? '📈' : data.tendencia === 'Bajando' ? '📉' : '➡️';
+
+        content.innerHTML = `
+            <div class="analisis-grid">
+                <div class="analisis-item">
+                    <span class="analisis-label">Demanda</span>
+                    <span class="analisis-value" style="color:${demandaColor}">${data.demanda}</span>
+                </div>
+                <div class="analisis-item">
+                    <span class="analisis-label">Tendencia</span>
+                    <span class="analisis-value">${tendenciaIcon} ${data.tendencia}</span>
+                </div>
+                <div class="analisis-item">
+                    <span class="analisis-label">Momento para vender</span>
+                    <span class="analisis-value">${data.momento}</span>
+                </div>
+            </div>
+            <div class="consejos-list">
+                <strong>Consejos para vender:</strong>
+                <ul>
+                    ${data.consejos.map(c => `<li>${c}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    } catch {
+        container.classList.add('hidden');
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Chatbot
+// ---------------------------------------------------------------------------
+async function enviarChat() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const messages = document.getElementById('chat-messages');
+    messages.innerHTML += `<div class="chat-msg user-msg">${msg}</div>`;
+    input.value = '';
+    messages.innerHTML += `<div class="chat-msg bot-msg loading-msg"><div class="spinner-small"></div></div>`;
+    messages.scrollTop = messages.scrollHeight;
+
+    try {
+        const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                pregunta: msg,
+                producto: {
+                    marca: formData.marca,
+                    modelo: formData.modelo,
+                    estado: formData.estado,
+                    precio: document.querySelector('.precio-item.sugerido .precio-valor')?.textContent || 0,
+                },
+            }),
+        });
+        const data = await res.json();
+        const loadingMsg = messages.querySelector('.loading-msg');
+        if (loadingMsg) loadingMsg.remove();
+        messages.innerHTML += `<div class="chat-msg bot-msg">${data.respuesta}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+    } catch {
+        const loadingMsg = messages.querySelector('.loading-msg');
+        if (loadingMsg) loadingMsg.remove();
+        messages.innerHTML += `<div class="chat-msg bot-msg">Error al conectar con la IA</div>`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('chat-input')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') enviarChat();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Vision AI - Upload foto
+// ---------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('fotoInput')?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const base64 = reader.result.split(',')[1];
+            const resultado = document.getElementById('deteccion-resultado');
+            resultado.classList.remove('hidden');
+            resultado.innerHTML = '<div class="spinner-container"><div class="spinner-small"></div> Detectando producto...</div>';
+
+            try {
+                const res = await fetch('/api/detectar-foto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ imagen: base64 }),
+                });
+                const data = await res.json();
+
+                if (data.detectado) {
+                    let html = '<div class="deteccion-exito">';
+                    if (data.marca) html += `<p>Marca detectada: <strong>${data.marca}</strong></p>`;
+                    if (data.tipo) html += `<p>Tipo: <strong>${data.tipo}</strong></p>`;
+                    if (data.etiquetas.length) {
+                        html += `<p>Elementos: ${data.etiquetas.slice(0, 5).join(', ')}</p>`;
+                    }
+                    if (data.productos_sugeridos.length) {
+                        html += '<p>Productos sugeridos:</p><ul>';
+                        data.productos_sugeridos.forEach(p => {
+                            html += `<li onclick="seleccionarProducto('${p.categoria}', '${p.marca}', '${p.modelo}')" class="producto-sugerido">${p.marca} ${p.modelo}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    html += '</div>';
+                    resultado.innerHTML = html;
+                } else {
+                    resultado.innerHTML = `<p class="deteccion-info">${data.mensaje || 'No se pudo detectar el producto. Selecciona manualmente.'}</p>`;
+                }
+            } catch {
+                resultado.innerHTML = '<p class="deteccion-info">Error al analizar la foto</p>';
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+function seleccionarProducto(categoria, marca, modelo) {
+    formData.categoria = categoria;
+    formData.marca = marca;
+    formData.modelo = modelo;
+    loadCategorias();
+}
+
+// ---------------------------------------------------------------------------
+// History
+// ---------------------------------------------------------------------------
 function saveHistory(form, precios) {
     const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
     history.unshift({
@@ -374,6 +596,9 @@ function clearHistory() {
     renderHistory();
 }
 
+// ---------------------------------------------------------------------------
+// Insights
+// ---------------------------------------------------------------------------
 async function loadInsights() {
     const grid = document.getElementById('insights-grid');
     try {
@@ -383,7 +608,7 @@ async function loadInsights() {
             const color = d.depBueno < 40 ? '#059669' : d.depBueno < 55 ? '#d97706' : '#dc2626';
             return `
                 <div class="insight-card">
-                    <div class="cat-name">${d.categoria}</div>
+                    <div class="cat-name">${d.icon || ''} ${d.categoria}</div>
                     <div class="insight-bar-wrap">
                         <div class="insight-bar" style="width:${d.depBueno}%;background:${color}"></div>
                     </div>
@@ -396,6 +621,28 @@ async function loadInsights() {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Reiniciar
+// ---------------------------------------------------------------------------
+function reiniciar() {
+    currentStep = 1;
+    formData = { categoria: '', marca: '', modelo: '', estado: 'Bueno', accesorios: '', idioma: 'both' };
+    showStep(1);
+    updateStepper();
+    loadCategorias();
+    document.getElementById('accesorios-input').value = '';
+    document.querySelector('input[name="estado"][value="Bueno"]').checked = true;
+    document.getElementById('chart-container').style.display = 'none';
+    document.getElementById('prediccion-container').classList.add('hidden');
+    document.getElementById('analisis-container').classList.add('hidden');
+    document.getElementById('chat-container').classList.add('hidden');
+    document.getElementById('deteccion-resultado').classList.add('hidden');
+    document.getElementById('chat-messages').innerHTML = '';
+    if (priceChart) { priceChart.destroy(); priceChart = null; }
+    if (prediccionChart) { prediccionChart.destroy(); prediccionChart = null; }
+}
+
+// Init
 loadCategorias();
 renderHistory();
 loadInsights();

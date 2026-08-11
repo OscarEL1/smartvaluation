@@ -1,2 +1,23 @@
-node_modules/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
 .env
+*.egg-info/
+dist/
+build/
+
+# Google Cloud Vision
+vision/credentials.json
+
+# Node (legacy)
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db

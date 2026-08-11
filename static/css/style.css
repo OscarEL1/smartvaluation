@@ -638,6 +638,313 @@ header h1 {
     color: var(--gray-900);
 }
 
+/* Photo Upload */
+.photo-upload-area {
+    margin-bottom: 1rem;
+}
+
+.btn-photo {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--gray-50);
+    border: 2px dashed var(--gray-300);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-photo:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.deteccion-exito {
+    padding: 1rem;
+    background: var(--green-light);
+    border-radius: 10px;
+    margin-top: 0.5rem;
+}
+
+.deteccion-exito p {
+    margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+}
+
+.deteccion-info {
+    padding: 0.8rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-align: center;
+}
+
+.producto-sugerido {
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.producto-sugerido:hover {
+    text-decoration: underline;
+}
+
+/* Hidden */
+.hidden {
+    display: none !important;
+}
+
+/* Comparacion Card */
+.comparacion-card {
+    background: var(--primary-light);
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.comparacion-card h4 {
+    font-size: 0.8rem;
+    color: var(--primary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.comparacion-card p {
+    font-size: 0.85rem;
+    color: var(--gray-700);
+    margin-bottom: 0.3rem;
+}
+
+.recomendacion-text {
+    font-style: italic;
+    color: var(--gray-500) !important;
+    margin-top: 0.5rem !important;
+}
+
+/* Prediccion */
+#prediccion-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid var(--gray-200);
+}
+
+#prediccion-container h3 {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.prediccion-info-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.pred-card {
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+}
+
+.pred-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.pred-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.pred-value-sm {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Analisis de Mercado */
+#analisis-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid var(--gray-200);
+}
+
+#analisis-container h3 {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.analisis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.analisis-item {
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+}
+
+.analisis-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.analisis-value {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.consejos-list {
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.consejos-list strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--gray-700);
+}
+
+.consejos-list ul {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.consejos-list li {
+    margin-bottom: 0.3rem;
+    color: var(--gray-600);
+}
+
+/* Chatbot */
+#chat-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid var(--gray-200);
+}
+
+#chat-container h3 {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+#chat-messages {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+}
+
+.chat-msg {
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    max-width: 85%;
+}
+
+.user-msg {
+    background: var(--primary);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-msg {
+    background: white;
+    color: var(--gray-700);
+    border: 1px solid var(--gray-200);
+    border-bottom-left-radius: 4px;
+}
+
+.loading-msg {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.spinner-small {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--gray-200);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.chat-input-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-input-row input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 2px solid var(--gray-200);
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.chat-input-row input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.btn-chat-send {
+    padding: 0.6rem 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-chat-send:hover {
+    background: var(--primary-dark);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .options-grid {
@@ -654,5 +961,14 @@ header h1 {
 
     .form-card {
         padding: 1.5rem;
+    }
+
+    .prediccion-info-cards,
+    .analisis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-input-row {
+        flex-direction: column;
     }
 }
