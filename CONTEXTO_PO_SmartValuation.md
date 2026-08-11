@@ -39,7 +39,6 @@ smartvaluation/
 | Servidor ASGI | Uvicorn | 0.52.1 |
 | Frontend | HTML + CSS + JS vanilla | Sin framework |
 | IA Generativa | Groq API (Llama 3.3 70B) | API gratuita |
-| Vision AI | Google Cloud Vision | 1,000 fotos/mes gratis |
 | Graficas | Chart.js | 4.4.7 CDN |
 | HTTP Client | httpx (async) | 0.24.0+ |
 | Datos | CSV local | 84 productos |
@@ -87,10 +86,11 @@ smartvaluation/
 - Enfocado exclusivamente en asesorar al VENDEDOR
 - Recomendaciones de precio, publicacion y estrategia
 
-### 8. Vision AI (Google Cloud Vision)
-- Subir foto del articulo para deteccion automatica
-- Identifica marca, tipo de producto y etiquetas
-- Sugiere productos de la base de datos
+### 8. Deteccion por Foto (Proximamente)
+- Subir foto del articulo desde el stepper form
+- Mensaje de donativo bonito para activar la funcion
+- Enlace directo a PayPal para donar desde $1 USD
+- Vision AI planeada para cuando se financie
 
 ### 9. Grafica de Precios (Chart.js)
 - Barras comparando min/sugerido/max vs precio nuevo
@@ -126,7 +126,6 @@ smartvaluation/
 
 ```
 GROQ_API_KEY=gsk_xxxxx    # API key de Groq (gratis)
-GOOGLE_APPLICATION_CREDENTIALS=./vision/credentials.json  # Vision AI (opcional)
 PORT=5000                 # Puerto del servidor
 ```
 
@@ -145,7 +144,7 @@ PORT=5000                 # Puerto del servidor
 | POST | `/api/chat` | Chatbot de asesoramiento de ventas |
 | GET | `/api/prediccion` | Prediccion de depreciacion a 12 meses |
 | POST | `/api/analisis-mercado` | Analisis de mercado via IA |
-| POST | `/api/detectar-foto` | Vision AI para detectar producto |
+| POST | `/api/detectar-foto` | Deteccion por foto (donativo proximamente) |
 
 ## Datos del CSV
 
@@ -247,17 +246,17 @@ main (produccion, deploy automatico en Render)
 ├── feat: migrar backend a Python/FastAPI + IA features completas
 ├── feat: mejoras IA + layout tabs + chatbot enfocado en vender
 ├── feat: rediseño completo UI moderno responsive
+├── feat: reemplazar Vision AI con mensaje de donativo para escaneo de fotos
 ├── fix: eliminar variable query duplicada que rompia el JS
 ├── fix: mejorar manejo de errores en llamadas a Groq API
-├── docs: presentacion HTML, PDF y PowerPoint para materia
-├── docs: guion de preguntas y respuestas para presentacion
-└── docs: agregar seccion de decision de datos CSV vs APIs externas
+├── docs: actualizar contexto y presentacion con features actuales
+└── docs: guion de preguntas y respuestas para presentacion
 ```
 
 ## Mejoras Futuras Documentadas
 
 ### Prioridad Alta
-- [ ] Vision AI completa con Google Cloud Vision (credenciales)
+- [ ] Vision AI con Google Cloud Vision (financiacion via donativos)
 - [ ] Web scraping en tiempo real de MercadoLibre (requiere proxy residencial)
 - [ ] Base de datos SQLite o Supabase en vez de CSV
 

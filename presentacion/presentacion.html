@@ -84,7 +84,7 @@
         <strong>FRONTEND</strong> (HTML + CSS + JS + Reveal.js)<br>
         Stepper Form → Tabs (Precios, Descripcion, Analisis, Chat)<br><br>
         <strong>BACKEND</strong> (Python + FastAPI + Uvicorn)<br>
-        Motor de Precios → IA Descripcion → Chatbot → Vision AI → Analisis<br><br>
+        Motor de Precios → IA Descripcion → Chatbot → Analisis<br><br>
         <strong>IA GENERATIVA</strong> (Groq API + Llama 3.3 70B)<br>
         Descripciones, chatbot, analisis de mercado, prediccion<br><br>
         <strong>BASE DE DATOS</strong> (CSV - 84 productos)<br>
@@ -108,13 +108,6 @@
     <table>
         <tr><th>Fuente</th><th>Metodo</th><th>Datos Obtenidos</th></tr>
         <tr><td>MercadoLibre Mexico</td><td>Extraccion manual</td><td>Precios de 84 productos reales</td></tr>
-        <tr><td>MercadoLibre</td><td>Clasificacion por categorias</td><td>10 categorias de productos</td></tr>
-        <tr><td>MercadoLibre</td><td>Analisis de depreciacion</td><td>Factores de estado fisico</td></tr>
-    </table>
-    <h3 style="margin-top:.6em">Por que CSV y no APIs?</h3>
-    <div class="fgrid" style="margin-top:.3em">
-        <div class="fcard"><div class="em">🚫</div><h4>MercadoLibre API</h4><p>Bloqueada (403), requiere OAuth aprobado</p></div>
-        <div class="fcard"><div class="em">💰</div><h4>Costo $0</th><td>Extraccion manual</td><td>Precios de 84 productos reales</td></tr>
         <tr><td>MercadoLibre</td><td>Clasificacion por categorias</td><td>10 categorias de productos</td></tr>
         <tr><td>MercadoLibre</td><td>Analisis de depreciacion</td><td>Factores de estado fisico</td></tr>
     </table>
@@ -195,7 +188,7 @@ precio_maximo = precio_sugerido + variacion</div>
         <div class="fcard"><div class="em">📊</div><h4>Comparacion de Mercado</h4><p>Compara tu precio con el promedio de la categoria y recomienda estrategia</p></div>
         <div class="fcard"><div class="em">🔮</div><h4>Prediccion 12 Meses</h4><p>Grafica de depreciacion futura y mejor momento para vender</p></div>
         <div class="fcard"><div class="em">📈</div><h4>Analisis de Mercado</h4><p>Demanda, tendencia, momento para vender y consejos personalizados</p></div>
-        <div class="fcard"><div class="em">👁️</div><h4>Vision AI</h4><p>Subir foto para detectar producto automaticamente (Google Cloud Vision)</p></div>
+        <div class="fcard"><div class="em">📸</div><h4>Deteccion por Foto</h4><p>Proximamente con Vision AI - boton de donativo para activar la funcion</p></div>
     </div>
 </section>
 
@@ -244,7 +237,7 @@ precio_maximo = precio_sugerido + variacion</div>
         <tr><td>POST</td><td>/api/chat</td><td>Chatbot de ventas</td></tr>
         <tr><td>GET</td><td>/api/prediccion</td><td>Prediccion 12 meses</td></tr>
         <tr><td>POST</td><td>/api/analisis-mercado</td><td>Analisis IA del mercado</td></tr>
-        <tr><td>POST</td><td>/api/detectar-foto</td><td>Vision AI (foto)</td></tr>
+        <tr><td>POST</td><td>/api/detectar-foto</td><td>Deteccion por foto (donativo)</td></tr>
     </table>
 </section>
 
@@ -301,7 +294,6 @@ precio_maximo = precio_sugerido + variacion</div>
         <tr><td>Backend</td><td>Python + FastAPI</td><td>Servidor async moderno</td></tr>
         <tr><td>Frontend</td><td>HTML + CSS + JS</td><td>UI responsive con tabs</td></tr>
         <tr><td>IA Generativa</td><td>Groq + Llama 3.3</td><td>5 features de IA</td></tr>
-        <tr><td>Vision AI</td><td>Google Cloud Vision</td><td>Deteccion de fotos</td></tr>
         <tr><td>Graficas</td><td>Chart.js</td><td>Precios + prediccion</td></tr>
         <tr><td>Datos</td><td>CSV</td><td>84 productos reales</td></tr>
         <tr><td>Deploy</td><td>Render Free Tier</td><td>Hosting automatico $0</td></tr>

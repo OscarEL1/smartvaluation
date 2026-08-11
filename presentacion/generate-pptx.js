@@ -104,7 +104,7 @@ addSectionSlide('Arquitectura del Sistema', 'Como esta construida la aplicacion'
     { text: 'Stepper Form \u2192 Tabs (Precios, Descripcion, Analisis, Chat)\n\n', options: { fontSize: 11, fontFace: 'Courier New', color: DARK } },
     { text: 'BACKEND', options: { fontSize: 12, fontFace: 'Courier New', color: DARK, bold: true } },
     { text: '  (Python + FastAPI + Uvicorn)\n', options: { fontSize: 11, fontFace: 'Courier New', color: GRAY } },
-    { text: 'Motor de Precios \u2192 IA Descripcion \u2192 Chatbot \u2192 Vision AI \u2192 Analisis\n\n', options: { fontSize: 11, fontFace: 'Courier New', color: DARK } },
+    { text: 'Motor de Precios \u2192 IA Descripcion \u2192 Chatbot \u2192 Analisis\n\n', options: { fontSize: 11, fontFace: 'Courier New', color: DARK } },
     { text: 'IA GENERATIVA', options: { fontSize: 12, fontFace: 'Courier New', color: DARK, bold: true } },
     { text: '  (Groq API + Llama 3.3 70B)\n', options: { fontSize: 11, fontFace: 'Courier New', color: GRAY } },
     { text: 'Descripciones, chatbot, analisis de mercado, prediccion\n\n', options: { fontSize: 11, fontFace: 'Courier New', color: DARK } },
@@ -230,7 +230,7 @@ addSectionSlide('Funcionalidades IA', '5 features con inteligencia artificial');
     { emoji: '\u{1F4CA}', title: 'Comparacion de Mercado', desc: 'Precio vs promedio de la categoria' },
     { emoji: '\u{1F52E}', title: 'Prediccion 12 Meses', desc: 'Depreciacion futura y mejor momento para vender' },
     { emoji: '\u{1F4C8}', title: 'Analisis de Mercado', desc: 'Demanda, tendencia y consejos personalizados' },
-    { emoji: '\u{1F441}\u{FE0F}', title: 'Vision AI', desc: 'Subir foto para detectar producto automaticamente' },
+    { emoji: '\u{1F4F8}', title: 'Deteccion por Foto', desc: 'Proximamente con Vision AI - boton de donativo' },
   ];
   features.forEach((f, i) => {
     const col = i % 2; const row = Math.floor(i / 2);
@@ -302,7 +302,7 @@ addSectionSlide('Funcionalidades IA', '5 features con inteligencia artificial');
     ['POST', '/api/chat', 'Chatbot de ventas'],
     ['GET', '/api/prediccion', 'Prediccion 12 meses'],
     ['POST', '/api/analisis-mercado', 'Analisis IA del mercado'],
-    ['POST', '/api/detectar-foto', 'Vision AI (foto)'],
+    ['POST', '/api/detectar-foto', 'Deteccion por foto (donativo)'],
   ];
   slide.addTable(rows, { x: 0.5, y: 1.0, w: 12, fontSize: 11, fontFace: 'Arial', color: DARK, border: { pt: 0.5, color: 'e2e8f0' }, colW: [2, 3.5, 6.5], rowH: 0.45, autoPage: false });
 }
@@ -373,7 +373,6 @@ addSectionSlide('Insights de Mercado', 'Conocimiento extraido del mercado');
     ['Backend', 'Python + FastAPI', 'Servidor async moderno'],
     ['Frontend', 'HTML + CSS + JS', 'UI responsive con tabs'],
     ['IA Generativa', 'Groq + Llama 3.3', '5 features de IA'],
-    ['Vision AI', 'Google Cloud Vision', 'Deteccion de fotos'],
     ['Graficas', 'Chart.js', 'Precios + prediccion'],
     ['Datos', 'CSV', '84 productos reales'],
     ['Deploy', 'Render Free Tier', 'Hosting automatico $0'],
