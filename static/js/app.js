@@ -206,7 +206,7 @@ async function loadResultado() {
                         <div class="precio-label">Minimo</div>
                         <div class="precio-valor">$${p.minimo.toLocaleString()}</div>
                     </div>
-                    <div class precio-item sugerido">
+                    <div class="precio-item sugerido">
                         <div class="precio-label">Sugerido</div>
                         <div class="precio-valor">$${p.sugerido.toLocaleString()}</div>
                     </div>
