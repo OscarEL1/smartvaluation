@@ -576,6 +576,8 @@ async def detectar_foto(params: VisionParams):
         from google.oauth2 import service_account
 
         creds_dict = json.loads(creds_json)
+        if "private_key" in creds_dict:
+            creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
         creds = service_account.Credentials.from_service_account_info(creds_dict)
         client = vision.ImageAnnotatorClient(credentials=creds)
 
