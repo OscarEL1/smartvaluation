@@ -126,6 +126,55 @@ El archivo `data/productos.csv` contiene 84 productos con precios reales de Merc
 | Bicicleta | 3 | Giant ATX, Trek Marlin |
 | Microondas | 3 | Whirlpool 20L, Samsung 23L |
 
+## Decision de Datos: CSV vs APIs Externas
+
+### Por que CSV y no APIs de marketplaces?
+
+Durante el desarrollo del proyecto, se investigaron varias alternativas para obtener precios en tiempo real de productos usados:
+
+### APIs Investigadas
+
+| API | Resultado | Razon |
+|-----|-----------|-------|
+| **MercadoLibre** | Bloqueada (403) | Requiere OAuth aprobado, endpoint de busqueda cerrado al publico |
+| **eBay Browse API** | Limitada | Gratis pero solo 5,000 llamadas/dia, menos productos en Mexico |
+| **Amazon PA API** | No disponible | Requiere ser Associate con ventas minimas |
+| **AliExpress** | Sin API | No existe API publica |
+
+### Por que MercadoLibre no funciona
+
+MercadoLibre ha cerrado su API de busqueda para desarrolladores externos. Segun la comunidad de developers:
+
+> "La API la hicieron mierda los de Meli, la cerraron fuerte, el endpoint de search no sirve. Hay un par de workarounds pero todos requieren proxy ahora." - Fuente: Reddit r/merval
+
+Ademas, MercadoLibre bloquea scraping directo:
+- Detecta IPs de datacenter (como las de Render/AWS)
+- Requiere proxies residenciales ($5-20/mes) para funcionar
+- Cambia frecuentemente su estructura HTML
+
+### Decision: CSV como fuente de datos
+
+Se opto por un CSV por las siguientes razones:
+
+1. **Costo $0**: No necesita servicios de terceros ni proxies
+2. **Confiabilidad**: No depende de internet ni de APIs externas
+3. **Velocidad**: El servidor carga los datos instantaneamente
+4. **Suficiente para el prototipo**: 84 productos cubren las categorias principales
+5. **Migrable**: Facil de migrar a SQLite o PostgreSQL en el futuro
+
+### Precios del CSV
+
+Los precios fueron obtenidos por **extraccion manual controlada** de MercadoLibre Mexico (agosto 2026), verificando que reflejen el mercado real de productos usados en diferentes estados de conservacion.
+
+### Mejoras Futuras Documentadas
+
+Si el proyecto escala a produccion, se considerarian:
+
+1. **Proxies residenciales**: Servicio como BrightData o Smartproxy ($5-20/mes) para scraping de MercadoLibre
+2. **Supabase**: Base de datos PostgreSQL en la nube para almacenar precios actualizados
+3. **Cache inteligente**: Actualizar precios cada 12-24 horas via Puppeteer + proxy
+4. **eBay como complemento**: API gratuita para productos no disponibles en MercadoLibre
+
 ## Algoritmo de Precios
 
 ```javascript
@@ -149,8 +198,8 @@ maximo = precio + variacion
 ## Mejoras Pendientes (Backlog)
 
 ### Prioridad Alta
-- [ ] Web scraping en tiempo real de MercadoLibre (requiere OAuth o Puppeteer)
-- [ ] Base de datos SQLite en vez de CSV
+- [ ] Web scraping en tiempo real de MercadoLibre (requiere proxy residencial $5-20/mes + Puppeteer)
+- [ ] Base de datos SQLite o Supabase en vez de CSV
 - [ ] Autenticacion de usuarios (Firebase Auth gratis)
 - [ ] Historial en servidor (no solo localStorage)
 
