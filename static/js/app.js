@@ -529,6 +529,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     html += '</div>';
                     resultado.innerHTML = html;
+                } else if (data.donativo) {
+                    resultado.innerHTML = `
+                        <div class="donativo-card">
+                            <div class="donativo-icon">✨</div>
+                            <h4 class="donativo-titulo">Funcion Proximamente</h4>
+                            <p class="donativo-texto">La deteccion por foto esta en desarrollo. Ayudanos a activarla.</p>
+                            <div class="donativo-monto">
+                                <span class="donativo-label">Donativo desde</span>
+                                <span class="donativo-precio">$1 USD</span>
+                            </div>
+                            <a href="https://www.paypal.com/donate/?business=tu-email&amount=1&currency_code=USD" target="_blank" class="donativo-btn">
+                                Donar con PayPal
+                            </a>
+                            <p class="donativo-nota">Cualquier ayuda acelera el desarrollo.</p>
+                        </div>
+                    `;
                 } else {
                     resultado.innerHTML = `<p class="deteccion-info">${data.mensaje || 'No se pudo detectar el producto. Selecciona manualmente.'}</p>`;
                 }

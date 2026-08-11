@@ -562,89 +562,13 @@ Formato: {{"demanda":"...", "tendencia":"...", "momento":"...", "consejos":["tip
 
 @app.post("/api/detectar-foto")
 async def detectar_foto(params: VisionParams):
-    """Detectar producto desde foto usando Google Cloud Vision (si esta configurado)."""
-    creds_b64 = os.environ.get("GOOGLE_CREDENTIALS_JSON_B64", "")
-    if not creds_b64:
-        return {
-            "detectado": False,
-            "mensaje": "Google Cloud Vision no esta configurado. Agrega GOOGLE_CREDENTIALS_JSON_B64.",
-            "etiquetas": [],
-        }
-
-    try:
-        from google.cloud import vision
-        import tempfile, json as _json
-
-        raw = base64.b64decode(creds_b64).decode("utf-8")
-        creds_dict = _json.loads(raw)
-
-        if "private_key" in creds_dict:
-            pk = creds_dict["private_key"]
-            pk = pk.replace("\\n", "\n").replace("\\r", "")
-            pk = pk.strip()
-            if not pk.endswith("\n"):
-                pk += "\n"
-            creds_dict["private_key"] = pk
-
-        tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        tmp.write(_json.dumps(creds_dict))
-        tmp.close()
-
-        client = vision.ImageAnnotatorClient.from_service_account_file(tmp.name)
-
-        import os as _os
-        _os.unlink(tmp.name)
-
-        img_bytes = base64.b64decode(params.imagen)
-        image = vision.Image(content=img_bytes)
-
-        response = client.label_detection(image=image)
-        labels = response.label_annotations
-
-        marcas_conocidas = ["Samsung", "Apple", "Sony", "Xiaomi", "LG", "Nike", "Nintendo", "Microsoft"]
-        marca_detectada = None
-        for label in labels:
-            for marca in marcas_conocidas:
-                if marca.lower() in label.description.lower():
-                    marca_detectada = marca
-                    break
-            if marca_detectada:
-                break
-
-        tipos_map = {
-            "Headphones": "Audifonos", "Headset": "Audifonos",
-            "Mobile phone": "Celular", "Smartphone": "Celular",
-            "Laptop": "Laptop", "Computer": "Laptop",
-            "Television": "TV", "Tablet": "Tablet",
-            "Game console": "Consola", "Bicycle": "Bicicleta",
-        }
-        tipo_detectado = None
-        for label in labels:
-            for keyword, tipo in tipos_map.items():
-                if keyword.lower() in label.description.lower():
-                    tipo_detectado = tipo
-                    break
-            if tipo_detectado:
-                break
-
-        etiquetas = [l.description for l in labels[:8]]
-
-        productos_sugeridos = []
-        if marca_detectada:
-            productos_sugeridos = [
-                {"marca": p["marca"], "modelo": p["modelo"], "categoria": p["categoria"]}
-                for p in PRODUCTOS if p["marca"].lower() == marca_detectada.lower()
-            ][:5]
-
-        return {
-            "detectado": True,
-            "marca": marca_detectada,
-            "tipo": tipo_detectado,
-            "etiquetas": etiquetas,
-            "productos_sugeridos": productos_sugeridos,
-        }
-    except Exception as e:
-        return {"detectado": False, "mensaje": f"Error: {str(e)}", "etiquetas": []}
+    """Funcion de escaneo de foto - pronto con Vision AI."""
+    return {
+        "detectado": False,
+        "donativo": True,
+        "mensaje": "Esta funcion estara disponible pronto. Ayudanos a activarla con tu donativo.",
+        "etiquetas": [],
+    }
 
 
 # ---------------------------------------------------------------------------

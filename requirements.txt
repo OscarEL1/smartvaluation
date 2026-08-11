@@ -3,4 +3,3 @@ uvicorn>=0.23.0
 python-multipart>=0.0.6
 httpx>=0.24.0
 aiofiles>=23.0
-google-cloud-vision>=3.5.0
