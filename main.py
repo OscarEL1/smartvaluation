@@ -564,10 +564,11 @@ Formato: {{"demanda":"...", "tendencia":"...", "momento":"...", "consejos":["tip
 async def detectar_foto(params: VisionParams):
     """Detectar producto desde foto usando Google Cloud Vision (si esta configurado)."""
     creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON", "")
-    if not creds_json:
+    creds_b64 = os.environ.get("GOOGLE_CREDENTIALS_JSON_B64", "")
+    if not creds_json and not creds_b64:
         return {
             "detectado": False,
-            "mensaje": "Google Cloud Vision no esta configurado. Agrega la variable GOOGLE_CREDENTIALS_JSON.",
+            "mensaje": "Google Cloud Vision no esta configurado. Agrega la variable GOOGLE_CREDENTIALS_JSON_B64.",
             "etiquetas": [],
         }
 
@@ -575,13 +576,9 @@ async def detectar_foto(params: VisionParams):
         from google.cloud import vision
         from google.oauth2 import service_account
 
-        raw = os.environ.get("GOOGLE_CREDENTIALS_JSON_B64", "") or creds_json
-        if raw and not raw.strip().startswith("{"):
-            import binascii
-            try:
-                raw = base64.b64decode(raw).decode("utf-8")
-            except (binascii.Error, UnicodeDecodeError):
-                pass
+        raw = creds_b64 or creds_json
+        if not raw.strip().startswith("{"):
+            raw = base64.b64decode(raw).decode("utf-8")
         creds_dict = json.loads(raw)
         if "private_key" in creds_dict:
             pk = creds_dict["private_key"]
