@@ -182,38 +182,66 @@ async def generar_descripcion(categoria, marca, modelo, estado, accesorios, idio
     acc_text = accesorios or "No incluye"
 
     if idioma == "both":
-        lang_instruction = "Primero en ESPANOL (3 lineas con emojis). Luego separador '---'. Luego en INGLES (3 lineas con emojis)."
+        lang_instruction = "Primero escribe la descripcion completa en ESPANOL. Luego escribe el separador '---'. Luego escribe la descripcion completa en INGLES."
     elif idioma == "es":
-        lang_instruction = "Escribe SOLO en ESPANOL (3-4 lineas con emojis)."
+        lang_instruction = "Escribe SOLO en ESPANOL."
     else:
-        lang_instruction = "Write ONLY in ENGLISH (3-4 lines with emojis)."
+        lang_instruction = "Write ONLY in ENGLISH."
 
-    prompt = f"""Escribe una descripcion de venta para marketplace estilo MercadoLibre/Facebook Marketplace.
-Usa emojis llamativos, lenguaje de marketing y ventas, y formato visual atractivo.
-El tono debe ser entusiasta pero honesto. Incluye los accesorios con checkmarks.
-Maximo 120 palabras por idioma. No uses negrita ni markdown, solo texto plano con emojis.
+    prompt = f"""Eres un experto vendedor en MercadoLibre Mexico. Escribe una descripcion de venta PROFESIONAL y COMPLETA para este articulo de segunda mano.
 
-FORMATO:
-- Empieza con emoji de fuego + marca modelo + estado
-- Usa emojis de diamante, caja para features
-- Lista accesorios con checkmarks
-- Menciona que funciona al 100%
-- Cierra con call to action
+INSTRUCCIONES IMPORTANTES:
+- Escribe como si fueras el DUEÑO vendiendo su articulo personal, no como comprador
+- Usa lenguaje de marketing profesional pero honesto
+- NO inventes caracteristicas que no conozcas del modelo
+- Enfocate en los puntos fuertes conocidos de este modelo especifico
+- Maximo 250 palabras por idioma
+- NO uses markdown, negrita ni asteriscos, solo texto plano con emojis
+
+ESTRUCTURA DE LA DESCRIPCION:
+
+1. TITULO LLAMATIVO:
+Emoji de fuego + marca + modelo + gancho de venta
+
+2. INTRODUCCION (2-3 lineas):
+Breve descripcion de por que este articulo es una buena compra. Que lo hace especial.
+
+3. CARACTERISTICAS DESTACADAS (5-7 bullet points):
+Emoji de diamante + cada caracteristica importante del modelo:
+- Camara y fotos
+- Rendimiento/velocidad
+- Pantalla
+- Bateria
+- Diseno y materiales
+- Seguridad
+- Cualquier otro punto fuerte conocido
+
+4. ESTADO DEL ARTICULO:
+Emoji de check + descripcion honesta del estado fisico
+
+5. ACCESORIOS INCLUIDOS:
+Emoji de caja + lista de accesorios con checkmarks
+
+6. PRECIO Y NEGOCIACION:
+Emoji de dinero + precio sugerido + nota sobre negociacion
+
+7. CIERRE:
+Call to action urgente + como contactar
 
 IDIOMAS: {lang_instruction}
 
-Articulo:
+DATOS DEL ARTICULO:
 - Categoria: {categoria}
 - Marca: {marca}
 - Modelo: {modelo}
 - Estado: {estado}
-- Accesorios: {acc_text}
+- Accesorios incluidos: {acc_text}
 
-Escribe SOLO la descripcion, sin titulos ni explicaciones."""
+Escribe SOLO la descripcion, sin titulos extra ni explicaciones."""
 
     if api_key:
         try:
-            resultado = await llamar_groq(prompt, max_tokens=350, temperature=0.8)
+            resultado = await llamar_groq(prompt, max_tokens=800, temperature=0.8)
             if resultado:
                 return resultado
         except Exception as e:
@@ -445,22 +473,31 @@ Escribe SOLO la descripcion, sin titulos ni explicaciones."""
 @app.post("/api/chat")
 async def chat(params: ChatParams):
     producto = params.producto
-    prompt = f"""Eres un experto en venta de articulos usados en Mexico.
-Responde de forma breve, util y amigable (max 2 oraciones).
+    prompt = f"""Eres un asistente experto en VENTA de articulos usados en Mexico.
+Tu trabajo es ayudar al VENDEDOR a vender su articulo lo mas rapido posible y al mejor precio.
+NUNCA respondas como si fueras comprador. Siempre responde desde la perspectiva del vendedor.
 
-Contexto del producto:
+CONTEXTO - El usuario esta vendiendo este producto:
 - Marca: {producto.get('marca', 'N/A')}
 - Modelo: {producto.get('modelo', 'N/A')}
 - Estado: {producto.get('estado', 'N/A')}
-- Precio sugerido: ${producto.get('precio', 0)}
+- Precio sugerido para vender: ${producto.get('precio', 0)}
 
-Pregunta del usuario: {params.pregunta}
+REGLAS:
+- Responde SOLO sobre como VENDER mejor este articulo
+- Da consejos para vender mas rapido y mejor
+- Sugiere como mejorar la publicacion
+- Recomienda estrategias de venta en MercadoLibre/Facebook
+- Maximo 3 oraciones, breve y practico
+- Si te preguntan sobre comprar, redirige a que eres asistente de VENDEDORES
 
-Respuesta:"""
+Pregunta del vendedor: {params.pregunta}
 
-    respuesta = await llamar_groq(prompt, max_tokens=150, temperature=0.7)
+Respuesta util para el vendedor:"""
+
+    respuesta = await llamar_groq(prompt, max_tokens=200, temperature=0.7)
     if not respuesta:
-        respuesta = "Para consultas sobre precios, te recomiendo revisar el rango sugerido y comparar con otros vendedores en MercadoLibre."
+        respuesta = "Como vendedor, te recomiendo: precio competitivo, fotos claras, descripcion honesta y envio rapido. Esto ayuda a vender mas rapido."
 
     return {"respuesta": respuesta}
 

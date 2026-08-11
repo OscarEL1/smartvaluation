@@ -113,7 +113,6 @@
                     <select id="idioma-select">
                         <option value="both">Espanol + Ingles</option>
                         <option value="es">Solo Espanol</option>
-                        <option value="en">Solo Ingles</option>
                     </select>
                 </div>
             </div>
@@ -124,42 +123,70 @@
                 <div id="resultado-container">
                     <div class="spinner-container"><div class="spinner"></div><p class="spinner-text">Calculando precio con IA...</p></div>
                 </div>
-                <div class="chart-container" id="chart-container" style="display:none">
-                    <canvas id="priceChart"></canvas>
-                </div>
 
-                <!-- Comparacion inteligente -->
-                <div id="comparacion-container" class="hidden"></div>
-
-                <!-- Prediccion de depreciacion -->
-                <div id="prediccion-container" class="hidden">
-                    <h3>Prediccion de Precio (12 meses)</h3>
-                    <canvas id="prediccionChart"></canvas>
-                    <div id="prediccion-info"></div>
-                </div>
-
-                <!-- Analisis de mercado -->
-                <div id="analisis-container" class="hidden">
-                    <h3>Analisis de Mercado (IA)</h3>
-                    <div id="analisis-content"></div>
-                </div>
-
-                <!-- Chatbot -->
-                <div id="chat-container" class="hidden">
-                    <h3>Preguntale a la IA</h3>
-                    <div id="chat-messages"></div>
-                    <div class="chat-input-row">
-                        <input type="text" id="chat-input" placeholder="Ej: Es buen precio? Cuanto tarda en venderse?">
-                        <button class="btn-chat-send" onclick="enviarChat()">Enviar</button>
+                <!-- Tabs de resultados -->
+                <div class="results-tabs" id="results-tabs" style="display:none">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="tab-precios" onclick="switchTab('tab-precios')">Precios</button>
+                        <button class="tab-btn" data-tab="tab-descripcion" onclick="switchTab('tab-descripcion')">Descripcion IA</button>
+                        <button class="tab-btn" data-tab="tab-analisis" onclick="switchTab('tab-analisis')">Analisis</button>
+                        <button class="tab-btn" data-tab="tab-chat" onclick="switchTab('tab-chat')">Chat IA</button>
                     </div>
-                </div>
 
-                <!-- Dashboard Insights -->
-                <div class="dashboard-section" id="dashboard-section">
-                    <h3>Insights de mercado</h3>
-                    <p class="dashboard-subtitle">Depreciacion promedio por categoria (estado Bueno)</p>
-                    <div class="insights-grid" id="insights-grid">
-                        <div class="spinner-container"><div class="spinner"></div></div>
+                    <div class="tab-content active" id="tab-precios">
+                        <div class="chart-container" id="chart-container" style="display:none">
+                            <canvas id="priceChart"></canvas>
+                        </div>
+                        <div id="comparacion-container" class="hidden"></div>
+                        <div id="prediccion-container" class="hidden">
+                            <h3>Prediccion de Precio (12 meses)</h3>
+                            <canvas id="prediccionChart"></canvas>
+                            <div id="prediccion-info"></div>
+                        </div>
+                        <div class="marketplace-links">
+                            <h4>Buscar en marketplaces</h4>
+                            <div class="marketplace-btns">
+                                <a id="ml-link" href="#" target="_blank" class="mp-link ml">Mercado Libre</a>
+                                <a id="fb-link" href="#" target="_blank" class="mp-link fb">Facebook</a>
+                                <a id="amz-link" href="#" target="_blank" class="mp-link amz">Amazon</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-descripcion">
+                        <div class="resultado-card">
+                            <div class="descripcion-box">
+                                <p class="descripcion-text" id="desc-text"></p>
+                                <button class="copy-btn" onclick="copiarDescripcion()" style="display:none" id="copy-btn-final">
+                                    Copiar descripcion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-analisis">
+                        <div id="analisis-container" class="hidden">
+                            <h3>Analisis de Mercado (IA)</h3>
+                            <div id="analisis-content"></div>
+                        </div>
+                        <div class="dashboard-section" id="dashboard-section">
+                            <h3>Insights de mercado</h3>
+                            <p class="dashboard-subtitle">Depreciacion promedio por categoria (estado Bueno)</p>
+                            <div class="insights-grid" id="insights-grid">
+                                <div class="spinner-container"><div class="spinner"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-chat">
+                        <div id="chat-container">
+                            <h3>Preguntale a la IA sobre vender tu articulo</h3>
+                            <div id="chat-messages"></div>
+                            <div class="chat-input-row">
+                                <input type="text" id="chat-input" placeholder="Ej: Como puedo vender mas rapido?">
+                                <button class="btn-chat-send" onclick="enviarChat()">Enviar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

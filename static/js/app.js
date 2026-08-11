@@ -172,6 +172,18 @@ document.getElementById('btn-prev').addEventListener('click', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Tabs
+// ---------------------------------------------------------------------------
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.toggle('active', tab.id === tabId);
+    });
+}
+
+// ---------------------------------------------------------------------------
 // Resultado
 // ---------------------------------------------------------------------------
 async function loadResultado() {
@@ -227,32 +239,14 @@ async function loadResultado() {
                 <p>Promedio de la categoria: <strong>$${c.precio_promedio_mercado.toLocaleString()}</strong> (${c.total_productos_categoria} productos)</p>
                 <p class="recomendacion-text">${c.recomendacion}</p>
             </div>
-
-            <div class="marketplace-links">
-                <h4>Buscar en marketplaces</h4>
-                <div class="marketplace-btns">
-                    <a href="https://listado.mercadolibre.com.mx/${query}" target="_blank" class="mp-link ml">
-                        Mercado Libre
-                    </a>
-                    <a href="https://www.facebook.com/marketplace/search?q=${query}" target="_blank" class="mp-link fb">
-                        Facebook
-                    </a>
-                    <a href="https://www.amazon.com.mx/s?k=${query}" target="_blank" class="mp-link amz">
-                        Amazon
-                    </a>
-                </div>
-            </div>
-
-            <div class="resultado-card">
-                <div class="descripcion-box">
-                    <h4>Descripcion para publicar</h4>
-                    <p class="descripcion-text" id="desc-text"></p>
-                    <button class="copy-btn" onclick="copiarDescripcion()" style="display:none" id="copy-btn-final">
-                        Copiar descripcion
-                    </button>
-                </div>
-            </div>
         `;
+
+        // Configurar tabs y links
+        document.getElementById('results-tabs').style.display = 'block';
+        const query = encodeURIComponent(`${formData.marca} ${formData.modelo}`);
+        document.getElementById('ml-link').href = `https://listado.mercadolibre.com.mx/${query}`;
+        document.getElementById('fb-link').href = `https://www.facebook.com/marketplace/search?q=${query}`;
+        document.getElementById('amz-link').href = `https://www.amazon.com.mx/s?k=${query}`;
 
         renderChart(p);
         saveHistory(formData, p);
@@ -261,7 +255,7 @@ async function loadResultado() {
         // Cargar features de IA en paralelo
         loadPrediccion(p.sugerido, formData.categoria);
         loadAnalisisMercado(formData.marca, formData.modelo);
-        document.getElementById('chat-container').classList.remove('hidden');
+        loadInsights();
 
     } catch {
         container.innerHTML = '<div class="error-msg">Error al conectar con el servidor</div>';
@@ -635,9 +629,10 @@ function reiniciar() {
     document.getElementById('chart-container').style.display = 'none';
     document.getElementById('prediccion-container').classList.add('hidden');
     document.getElementById('analisis-container').classList.add('hidden');
-    document.getElementById('chat-container').classList.add('hidden');
-    document.getElementById('deteccion-resultado').classList.add('hidden');
+    document.getElementById('results-tabs').style.display = 'none';
     document.getElementById('chat-messages').innerHTML = '';
+    document.getElementById('deteccion-resultado').classList.add('hidden');
+    switchTab('tab-precios');
     if (priceChart) { priceChart.destroy(); priceChart = null; }
     if (prediccionChart) { prediccionChart.destroy(); prediccionChart = null; }
 }
